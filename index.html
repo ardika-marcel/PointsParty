@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎉 PointsParty — Employee Rewards HQ 🎉</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+  :root {
+    --pink: #FF6B9D;
+    --purple: #A855F7;
+    --blue: #3B82F6;
+    --cyan: #06B6D4;
+    --green: #22C55E;
+    --yellow: #FCD34D;
+    --orange: #FB923C;
+    --red: #EF4444;
+    --bg: #0F0A1E;
+    --card: #1A1035;
+    --card2: #1F1540;
+    --text: #F0E6FF;
+    --muted: #9B8EC4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== FLOATING EMOJIS BG ===== */
+  .emoji-bg {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .emoji-bg span {
+    position: absolute;
+    font-size: 2rem;
+    animation: floatUp linear infinite;
+    opacity: 0.08;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.08; }
+    90% { opacity: 0.08; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    position: relative; z-index: 10;
+    text-align: center;
+    padding: 2rem 1rem 1rem;
+    background: linear-gradient(180deg, #1A0A3A 0%, transparent 100%);
+  }
+  header h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    background: linear-gradient(90deg, #FF6B9D, #A855F7, #3B82F6, #06B6D4, #22C55E, #FCD34D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: rainbow 4s linear infinite;
+    background-size: 300%;
+  }
+  @keyframes rainbow { 0%{background-position:0%} 100%{background-position:300%} }
+  header p { color: var(--muted); font-size: 1rem; margin-top: .4rem; }
+
+  /* ===== TABS ===== */
+  .tabs {
+    display: flex; justify-content: center; gap: .75rem;
+    padding: 1.5rem 1rem;
+    position: relative; z-index: 10;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.05rem;
+    padding: .6rem 1.6rem;
+    border: none; border-radius: 50px;
+    cursor: pointer;
+    transition: all .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .tab-btn::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: white;
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .tab-btn:hover::after { opacity: .15; }
+  .tab-btn.t0 { background: linear-gradient(135deg, var(--cyan), var(--blue)); color: white; }
+  .tab-btn.t1 { background: linear-gradient(135deg, var(--pink), var(--purple)); color: white; }
+  .tab-btn.t2 { background: linear-gradient(135deg, var(--orange), var(--red)); color: white; }
+  .tab-btn.active { transform: scale(1.1); box-shadow: 0 0 25px rgba(255,255,255,.3); }
+
+  /* ===== PANELS ===== */
+  .panel {
+    display: none;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1rem 4rem;
+    position: relative; z-index: 10;
+    animation: slideIn .35s ease;
+  }
+  .panel.active { display: block; }
+  @keyframes slideIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid rgba(255,255,255,.07);
+    box-shadow: 0 8px 32px rgba(0,0,0,.3);
+  }
+  .card h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5rem;
+    margin-bottom: .75rem;
+  }
+  .card p, .card li { color: #C4B5D8; line-height: 1.7; }
+  .card ul { padding-left: 1.2rem; }
+  .card li { margin-bottom: .4rem; }
+
+  .section-label {
+    font-family: 'Fredoka One', cursive;
+    font-size: .8rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .4rem;
+  }
+
+  /* ===== FORM ELEMENTS ===== */
+  input, select, textarea {
+    width: 100%;
+    background: rgba(255,255,255,.07);
+    border: 1.5px solid rgba(255,255,255,.12);
+    border-radius: 12px;
+    padding: .7rem 1rem;
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-size: .95rem;
+    margin-top: .3rem;
+    margin-bottom: .85rem;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(168,85,247,.2);
+  }
+  input::placeholder { color: var(--muted); }
+  select option { background: #1A1035; }
+  label { font-weight: 700; font-size: .9rem; display: block; }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    padding: .65rem 1.6rem;
+    border: none; border-radius: 50px;
+    cursor: pointer;
+    transition: all .2s;
+    display: inline-block;
+  }
+  .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  .btn:active { transform: translateY(0); }
+  .btn-pink { background: linear-gradient(135deg, var(--pink), var(--purple)); color: white; }
+  .btn-blue { background: linear-gradient(135deg, var(--cyan), var(--blue)); color: white; }
+  .btn-green { background: linear-gradient(135deg, var(--green), var(--cyan)); color: white; }
+  .btn-orange { background: linear-gradient(135deg, var(--orange), var(--red)); color: white; }
+  .btn-yellow { background: linear-gradient(135deg, var(--yellow), var(--orange)); color: #1A1035; }
+  .btn-sm { font-size: .85rem; padding: .45rem 1.1rem; }
+  .btn-full { width: 100%; text-align: center; display: block; }
+
+  /* ===== TOAST ===== */
+  #toast {
+    position: fixed; bottom: 2rem; right: 2rem;
+    padding: .9rem 1.6rem;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: .95rem;
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all .3s;
+    pointer-events: none;
+    max-width: 320px;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+  #toast.success { background: linear-gradient(135deg, #22C55E, #06B6D4); color: white; }
+  #toast.error { background: linear-gradient(135deg, #EF4444, #F97316); color: white; }
+  #toast.info { background: linear-gradient(135deg, #A855F7, #3B82F6); color: white; }
+
+  /* ===== AVATAR PICKER ===== */
+  .avatar-grid {
+    display: flex; flex-wrap: wrap; gap: .5rem;
+    margin-bottom: 1rem;
+  }
+  .avatar-opt {
+    font-size: 1.8rem;
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.06);
+    border: 2.5px solid transparent;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .avatar-opt:hover { background: rgba(255,255,255,.14); transform: scale(1.1); }
+  .avatar-opt.selected { border-color: var(--pink); background: rgba(255,107,157,.2); transform: scale(1.15); }
+
+  /* ===== EMPLOYEE DASHBOARD ===== */
+  .profile-header {
+    display: flex; align-items: center; gap: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .profile-avatar {
+    font-size: 3rem;
+    width: 70px; height: 70px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .profile-name { font-family: 'Fredoka One', cursive; font-size: 1.6rem; }
+  .profile-status { font-size: .85rem; color: var(--muted); margin-top: .1rem; }
+
+  /* ===== POINTS DISPLAY ===== */
+  .points-big {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3.5rem;
+    background: linear-gradient(135deg, var(--yellow), var(--orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ===== PROGRESS GRAPHIC ===== */
+  .reward-track {
+    position: relative;
+    padding: 1rem 0;
+  }
+  .track-bar {
+    height: 16px;
+    border-radius: 50px;
+    background: rgba(255,255,255,.08);
+    overflow: hidden;
+    position: relative;
+    margin: 1.5rem 0;
+  }
+  .track-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #A855F7, #FF6B9D, #FCD34D);
+    transition: width 1s cubic-bezier(.4,0,.2,1);
+    position: relative;
+  }
+  .track-fill::after {
+    content: '✨';
+    position: absolute; right: -4px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+  }
+  .milestones {
+    display: flex; flex-wrap: wrap; gap: .6rem;
+    margin-top: .5rem;
+  }
+  .milestone {
+    background: rgba(255,255,255,.06);
+    border-radius: 12px;
+    padding: .6rem .9rem;
+    flex: 1; min-width: 120px;
+    text-align: center;
+    border: 1.5px solid rgba(255,255,255,.08);
+    transition: all .2s;
+  }
+  .milestone.achieved {
+    background: linear-gradient(135deg, rgba(168,85,247,.25), rgba(255,107,157,.25));
+    border-color: var(--purple);
+  }
+  .milestone .m-pts { font-family: 'Fredoka One', cursive; font-size: 1rem; color: var(--yellow); }
+  .milestone .m-icon { font-size: 1.4rem; }
+  .milestone .m-label { font-size: .75rem; color: var(--muted); margin-top: .2rem; }
+
+  /* ===== VIOLATIONS LIST ===== */
+  .violation-item {
+    background: rgba(239,68,68,.1);
+    border: 1px solid rgba(239,68,68,.25);
+    border-radius: 12px;
+    padding: .75rem 1rem;
+    margin-bottom: .6rem;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: .5rem;
+  }
+  .violation-item .v-reason { font-size: .9rem; flex: 1; }
+  .violation-item .v-pts {
+    font-family: 'Fredoka One', cursive;
+    color: var(--red);
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+  .violation-item .v-date { font-size: .75rem; color: var(--muted); }
+
+  /* ===== ADMIN PANEL ===== */
+  .pending-item {
+    background: rgba(255,255,255,.05);
+    border-radius: 14px;
+    padding: .9rem 1.1rem;
+    margin-bottom: .7rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: .5rem;
+    flex-wrap: wrap;
+  }
+  .pending-info { display: flex; align-items: center; gap: .8rem; }
+  .pending-avatar { font-size: 1.8rem; }
+  .pending-name { font-weight: 800; }
+  .pending-actions { display: flex; gap: .5rem; }
+
+  .employee-row {
+    background: rgba(255,255,255,.04);
+    border-radius: 14px;
+    padding: .85rem 1.1rem;
+    margin-bottom: .6rem;
+    display: flex; align-items: center; gap: .8rem;
+    flex-wrap: wrap;
+  }
+  .employee-row .er-avatar { font-size: 1.6rem; }
+  .employee-row .er-info { flex: 1; min-width: 100px; }
+  .employee-row .er-name { font-weight: 800; font-size: .95rem; }
+  .employee-row .er-pts { font-family: 'Fredoka One', cursive; color: var(--yellow); font-size: 1.1rem; }
+
+  /* ===== BADGES ===== */
+  .badge {
+    display: inline-block;
+    font-size: .72rem;
+    font-weight: 800;
+    padding: .2rem .6rem;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  .badge-pending { background: rgba(252,211,77,.2); color: var(--yellow); }
+  .badge-approved { background: rgba(34,197,94,.2); color: var(--green); }
+  .badge-suspended { background: rgba(239,68,68,.2); color: var(--red); }
+
+  /* ===== ADMIN LOGIN ===== */
+  .admin-lock {
+    text-align: center;
+    padding: 3rem 1rem;
+  }
+  .lock-icon { font-size: 4rem; margin-bottom: 1rem; }
+  .admin-lock h2 { font-family: 'Fredoka One', cursive; font-size: 1.8rem; margin-bottom: .5rem; }
+
+  /* ===== SECTION DIVIDER ===== */
+  .divider {
+    height: 1px;
+    background: rgba(255,255,255,.08);
+    margin: 1.5rem 0;
+  }
+
+  .confetti-burst {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 99999;
+    font-size: 3rem;
+    opacity: 0;
+    animation: burstOut .8s ease forwards;
+  }
+  @keyframes burstOut {
+    0% { opacity: 1; transform: translate(-50%,-50%) scale(0.5); }
+    60% { opacity: 1; transform: translate(-50%,-50%) scale(1.5); }
+    100% { opacity: 0; transform: translate(-50%,-70%) scale(2); }
+  }
+
+  /* ===== INFO PANEL SPECIFICS ===== */
+  .how-step {
+    display: flex; gap: 1rem; align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  .step-num {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8rem;
+    min-width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-num.s1 { background: linear-gradient(135deg,#06B6D4,#3B82F6); }
+  .step-num.s2 { background: linear-gradient(135deg,#A855F7,#FF6B9D); }
+  .step-num.s3 { background: linear-gradient(135deg,#FCD34D,#FB923C); }
+  .step-num.s4 { background: linear-gradient(135deg,#22C55E,#06B6D4); }
+  .step-text h3 { font-weight: 800; margin-bottom: .2rem; }
+  .step-text p { font-size: .9rem; color: #C4B5D8; }
+
+  .agreement-box {
+    background: rgba(255,255,255,.04);
+    border: 1px dashed rgba(255,255,255,.2);
+    border-radius: 14px;
+    padding: 1.2rem;
+    font-size: .88rem;
+    color: #B8A8D0;
+    line-height: 1.8;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .agreement-box::-webkit-scrollbar { width: 6px; }
+  .agreement-box::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 10px; }
+
+  .violation-type-card {
+    border-radius: 14px;
+    padding: .8rem 1rem;
+    margin-bottom: .6rem;
+    display: flex; align-items: center; gap: .8rem;
+  }
+  .vt-icon { font-size: 1.5rem; }
+  .vt-info h4 { font-weight: 800; font-size: .95rem; }
+  .vt-info p { font-size: .82rem; color: var(--muted); }
+  .vt-pts { font-family: 'Fredoka One', cursive; font-size: 1.2rem; margin-left: auto; }
+  .vt-mini { background: rgba(252,211,77,.1); border: 1px solid rgba(252,211,77,.2); }
+  .vt-medium { background: rgba(251,146,60,.1); border: 1px solid rgba(251,146,60,.2); }
+  .vt-grande { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.2); }
+  .vt-custom { background: rgba(168,85,247,.1); border: 1px solid rgba(168,85,247,.2); }
+
+  .monthly-row {
+    background: rgba(255,255,255,.04);
+    border-radius: 14px;
+    padding: .85rem 1.1rem;
+    margin-bottom: .6rem;
+    display: flex; align-items: center; gap: .8rem;
+    flex-wrap: wrap;
+  }
+  .monthly-row .mr-info { flex: 1; min-width: 100px; }
+  .monthly-row .mr-name { font-weight: 800; font-size: .95rem; }
+  .monthly-row .mr-sub { font-size: .78rem; color: var(--muted); margin-top: .1rem; }
+  .monthly-row .mr-pts { font-family: 'Fredoka One', cursive; color: var(--yellow); font-size: 1.1rem; margin-right: .5rem; }
+  .flex-row > * { flex: 1; min-width: 140px; }
+
+  .trip-banner {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(168,85,247,.3), rgba(255,107,157,.3));
+    border: 1px solid rgba(255,107,157,.3);
+    margin-top: 1rem;
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(168,85,247,.4); }
+    50% { box-shadow: 0 0 0 15px rgba(168,85,247,0); }
+  }
+  .trip-banner .t-icon { font-size: 3rem; }
+  .trip-banner h3 { font-family: 'Fredoka One', cursive; font-size: 1.4rem; margin-top: .5rem; }
+  .trip-banner p { font-size: .9rem; color: var(--muted); }
+
+  @media (max-width: 600px) {
+    .profile-header { flex-direction: column; text-align: center; }
+    .points-big { font-size: 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating emoji background -->
+<div class="emoji-bg" id="emojiBg"></div>
+
+<header>
+  <h1>🎉 PointsParty HQ 🎉</h1>
+  <p>Work hard. Earn points. Travel the world! ✈️🌍</p>
+</header>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn t0 active" onclick="switchTab(0)">📖 Info & Guide</button>
+  <button class="tab-btn t1" onclick="switchTab(1)">👤 Employee Zone</button>
+  <button class="tab-btn t2" onclick="switchTab(2)">🔐 Admin Panel</button>
+</div>
+
+<!-- ========== PANEL 0: INFO ========== -->
+<div class="panel active" id="panel0">
+
+  <div class="card">
+    <h2>👋 Welcome to PointsParty!</h2>
+    <p>This is your company's super-fun reward tracking system! Every month you earn points, stay professional, and unlock epic travel rewards. Let's go! 🚀</p>
+  </div>
+
+  <div class="card">
+    <h2>🗺️ How It Works</h2>
+    <div class="how-step">
+      <div class="step-num s1">1</div>
+      <div class="step-text">
+        <h3>Create Your Account</h3>
+        <p>Head to the <strong>Employee Zone</strong>, pick your emoji avatar, set a username & password, and register!</p>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="step-num s2">2</div>
+      <div class="step-text">
+        <h3>Get Approved by Admin</h3>
+        <p>After registering, your account is pending. Once the Admin approves you, your points journey begins! 🎊</p>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="step-num s3">3</div>
+      <div class="step-text">
+        <h3>Earn 500 Points Every Month</h3>
+        <p>Every month, 500 points are automatically added to your account. Stay out of trouble and they stack up fast! 💰</p>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="step-num s4">4</div>
+      <div class="step-text">
+        <h3>Reach Milestones → Win Trips!</h3>
+        <p>Hit enough points and you'll unlock incredible travel rewards — from Bandung to Turkey to Umroh! 🕌</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🏆 Reward Milestones</h2>
+    <div class="milestones">
+      <div class="milestone">
+        <div class="m-icon">🏔️</div>
+        <div class="m-pts">3,000</div>
+        <div class="m-label">Bandung & Lembang Trip</div>
+      </div>
+      <div class="milestone">
+        <div class="m-icon">🏖️</div>
+        <div class="m-pts">7,500</div>
+        <div class="m-label">Bali Trip</div>
+      </div>
+      <div class="milestone">
+        <div class="m-icon">🐘</div>
+        <div class="m-pts">10,000</div>
+        <div class="m-label">Thailand Trip</div>
+      </div>
+      <div class="milestone">
+        <div class="m-icon">🕌</div>
+        <div class="m-pts">15,000</div>
+        <div class="m-label">Turkey Trip</div>
+      </div>
+      <div class="milestone">
+        <div class="m-icon">🌙</div>
+        <div class="m-pts">25,000</div>
+        <div class="m-label">Umroh Trip</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⚡ Violation Types</h2>
+    <p style="margin-bottom:.75rem;">Violations cause point deductions. Stay professional! 😇</p>
+    <div class="violation-type-card vt-mini">
+      <div class="vt-icon">🐣</div>
+      <div class="vt-info">
+        <h4>Mini Tiny Violation</h4>
+        <p>Small slip-ups, minor issues</p>
+      </div>
+      <div class="vt-pts" style="color:var(--yellow);">-50 pts</div>
+    </div>
+    <div class="violation-type-card vt-medium">
+      <div class="vt-icon">😬</div>
+      <div class="vt-info">
+        <h4>Not So Mini Violation</h4>
+        <p>Medium-level infractions</p>
+      </div>
+      <div class="vt-pts" style="color:var(--orange);">-100 pts</div>
+    </div>
+    <div class="violation-type-card vt-grande">
+      <div class="vt-icon">💀</div>
+      <div class="vt-info">
+        <h4>Grande Violation</h4>
+        <p>Serious rule-breaking — yikes!</p>
+      </div>
+      <div class="vt-pts" style="color:var(--red);">-200 pts</div>
+    </div>
+    <div class="violation-type-card vt-custom">
+      <div class="vt-icon">🛸</div>
+      <div class="vt-info">
+        <h4>Custom Violation</h4>
+        <p>Admin-defined, any amount</p>
+      </div>
+      <div class="vt-pts" style="color:var(--purple);">Custom pts</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📜 Agreement Letter</h2>
+    <p style="margin-bottom:.75rem; font-size:.9rem; color:var(--muted);">Please read carefully before registering:</p>
+    <div class="agreement-box">
+      <strong>EMPLOYEE POINTS & REWARDS PROGRAM — PARTICIPATION AGREEMENT</strong><br><br>
+      By registering on PointsParty HQ, I, the undersigned employee ("Participant"), agree to the following terms and conditions:<br><br>
+      <strong>1. PROGRAM OVERVIEW</strong><br>
+      The Employee Rewards Program ("Program") is administered by the Company and is designed to incentivize professional conduct, attendance, and performance through a points-based reward system. Participation is voluntary but subject to management approval.<br><br>
+      <strong>2. POINT ACCUMULATION</strong><br>
+      Each approved Participant shall receive five hundred (500) points at the beginning of every calendar month, credited automatically to their account. Points do not have monetary value and cannot be transferred, sold, or redeemed for cash under any circumstances.<br><br>
+      <strong>3. VIOLATIONS & DEDUCTIONS</strong><br>
+      The Company reserves the right to deduct points from any Participant's balance in the event of violations of company policy, code of conduct, or workplace regulations. Deductions shall be applied as follows: Mini Tiny Violation (−50 pts), Not So Mini Violation (−100 pts), Grande Violation (−200 pts), or as determined by the Admin for custom cases. All deductions shall include a written reason.<br><br>
+      <strong>4. REWARD REDEMPTION</strong><br>
+      Rewards are unlocked upon reaching specified point milestones. Reward trips are organized by the Company and are subject to scheduling, availability, and administrative approval. The Company reserves the right to modify or cancel trips with reasonable notice.<br><br>
+      <strong>5. ACCOUNT RESPONSIBILITY</strong><br>
+      Participants are solely responsible for maintaining the security of their login credentials. Sharing accounts is strictly prohibited and may result in account suspension.<br><br>
+      <strong>6. DISPUTE RESOLUTION</strong><br>
+      Any disputes regarding point deductions must be raised with HR in writing within seven (7) business days of the deduction notice.<br><br>
+      <strong>7. PROGRAM MODIFICATIONS</strong><br>
+      The Company reserves the right to modify, suspend, or terminate the Program at any time, with or without notice. Accumulated points may be adjusted accordingly.<br><br>
+      <strong>8. CONSENT</strong><br>
+      By creating an account on this platform, I confirm that I have read, understood, and agreed to all terms stated in this Agreement. I understand that my account is subject to Admin approval before I can access the Program.<br><br>
+      <em>— PointsParty HQ Management Team 🎉</em>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PANEL 1: EMPLOYEE ========== -->
+<div class="panel" id="panel1">
+  <!-- AUTH STATE: login/register/dashboard -->
+  <div id="emp-auth">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:4rem;margin-bottom:.5rem;">👤</div>
+      <h2>Employee Zone</h2>
+      <p style="margin-bottom:1.25rem;">Sign in or create your account!</p>
+      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-pink" onclick="showEmpLogin()">🔑 Login</button>
+        <button class="btn btn-blue" onclick="showEmpRegister()">✨ Register</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGIN FORM -->
+  <div id="emp-login" style="display:none;">
+    <div class="card">
+      <h2>🔑 Welcome Back!</h2>
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="Your username...">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="••••••••">
+      <button class="btn btn-pink btn-full" onclick="doLogin()">Let's Go! 🚀</button>
+      <div style="text-align:center;margin-top:.75rem;">
+        <a href="#" onclick="showEmpRegister();return false;" style="color:var(--purple);font-size:.9rem;">No account? Register here!</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGISTER FORM -->
+  <div id="emp-register" style="display:none;">
+    <div class="card">
+      <h2>✨ Create Account</h2>
+      <label>Pick Your Avatar</label>
+      <div class="avatar-grid" id="avatarGrid"></div>
+      <label>Username</label>
+      <input type="text" id="regUser" placeholder="Pick a cool username...">
+      <label>Password</label>
+      <input type="password" id="regPass" placeholder="Make it strong!">
+      <label>Confirm Password</label>
+      <input type="password" id="regPass2" placeholder="Say it again...">
+      <button class="btn btn-blue btn-full" onclick="doRegister()">🎉 Create Account!</button>
+      <div style="text-align:center;margin-top:.75rem;">
+        <a href="#" onclick="showEmpLogin();return false;" style="color:var(--pink);font-size:.9rem;">Already have an account? Login!</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMPLOYEE DASHBOARD -->
+  <div id="emp-dashboard" style="display:none;">
+    <div class="card" id="empProfileCard">
+      <!-- filled by JS -->
+    </div>
+
+    <div class="card">
+      <h2>📈 Your Points Thermometer</h2>
+      <div class="reward-track">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.25rem;">
+          <span class="section-label">Current Points</span>
+          <span class="points-big" id="empPointsDisplay">0</span>
+        </div>
+        <div class="track-bar">
+          <div class="track-fill" id="empTrackFill" style="width:0%"></div>
+        </div>
+        <div class="milestones" id="empMilestones"></div>
+      </div>
+    </div>
+
+    <div id="empNextTripBanner" style="display:none;"></div>
+
+    <div class="card">
+      <h2>🔄 Reset Password</h2>
+      <label>Old Password</label>
+      <input type="password" id="oldPass" placeholder="Current password...">
+      <label>New Password</label>
+      <input type="password" id="newPass" placeholder="New password...">
+      <label>Confirm New Password</label>
+      <input type="password" id="newPass2" placeholder="Confirm...">
+      <button class="btn btn-yellow" onclick="doResetPass()">🔄 Update Password</button>
+    </div>
+
+    <div class="card" id="empViolationsCard">
+      <h2>⚡ Violation History</h2>
+      <div id="empViolationsList"></div>
+    </div>
+
+    <div style="text-align:center;margin-top:.5rem;">
+      <button class="btn btn-orange btn-sm" onclick="doLogout()">👋 Logout</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PANEL 2: ADMIN ========== -->
+<div class="panel" id="panel2">
+
+  <!-- ADMIN LOGIN -->
+  <div id="admin-lock" class="card admin-lock">
+    <div class="lock-icon">🔐</div>
+    <h2>Admin Access Only!</h2>
+    <p style="color:var(--muted);margin-bottom:1.25rem;">Enter the secret admin password to proceed.</p>
+    <input type="password" id="adminPassInput" placeholder="Super secret password..." style="max-width:320px;margin:0 auto .8rem;">
+    <button class="btn btn-orange" onclick="doAdminLogin()">🔓 Unlock Admin Panel</button>
+  </div>
+
+  <!-- ADMIN DASHBOARD -->
+  <div id="admin-dashboard" style="display:none;">
+
+    <div class="card">
+      <h2>⏳ Pending Accounts</h2>
+      <div id="pendingList"><p style="color:var(--muted);">No pending accounts! 🎉</p></div>
+    </div>
+
+    <div class="card">
+      <h2>👥 Approved Employees</h2>
+      <div id="employeeList"><p style="color:var(--muted);">No approved employees yet.</p></div>
+    </div>
+
+    <div class="card">
+      <h2>⚡ Issue a Violation</h2>
+      <label>Target Employee</label>
+      <select id="violationTarget">
+        <option value="">-- Select Employee --</option>
+      </select>
+      <label>Violation Type</label>
+      <select id="violationType" onchange="handleViolationTypeChange()">
+        <option value="50">🐣 Mini Tiny Violation (−50 pts)</option>
+        <option value="100">😬 Not So Mini Violation (−100 pts)</option>
+        <option value="200">💀 Grande Violation (−200 pts)</option>
+        <option value="custom">🛸 Custom Violation</option>
+      </select>
+      <div id="customPtsRow" style="display:none;">
+        <label>Custom Point Deduction</label>
+        <input type="number" id="customPts" placeholder="e.g. 75" min="1">
+      </div>
+      <label>Reason for Violation</label>
+      <input type="text" id="violationReason" placeholder="Describe what happened...">
+      <button class="btn btn-orange" onclick="issueViolation()">⚡ Issue Violation</button>
+    </div>
+
+    <div class="card">
+      <h2>📅 Monthly Points — Credit 500 pts</h2>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem;">Each employee gets <strong>+500 points</strong> every month. Use the buttons below to credit a specific employee for the current month. You can only credit each employee <strong>once per month</strong>.</p>
+      <div id="monthlyPointsList"><p style="color:var(--muted);">No approved employees yet.</p></div>
+    </div>
+
+    <div style="text-align:center;margin-top:.5rem;">
+      <button class="btn btn-orange btn-sm" onclick="doAdminLogout()">👋 Admin Logout</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ===== SUPABASE CONFIG =====
+const SUPABASE_URL = 'https://yfqnuworomwehxdevchf.supabase.co/rest/v1';
+const SUPABASE_KEY = 'sb_publishable_jfhEtOx22magl34soCaJ8w_aM8TnkdV';
+
+async function sbFetch(path, options = {}) {
+  const res = await fetch(`${SUPABASE_URL}${path}`, {
+    ...options,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': options.prefer || 'return=representation',
+      ...(options.headers || {})
+    }
+  });
+  if (!res.ok) {
+    let errText = '';
+    try { errText = await res.text(); } catch {}
+    throw new Error(`Supabase ${res.status}: ${errText}`);
+  }
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+}
+
+// --- users table helpers ---
+async function loadUsers() {
+  try { return (await sbFetch('/users?select=*&order=joinedAt.asc')) || []; }
+  catch (e) { console.error(e); toast('Failed to load users from Supabase 😵', 'error'); return []; }
+}
+async function getUserByUsername(username) {
+  const rows = await sbFetch(`/users?username=eq.${encodeURIComponent(username)}&select=*`);
+  return (rows && rows[0]) || null;
+}
+async function insertUser(user) {
+  return await sbFetch('/users', { method: 'POST', body: JSON.stringify(user) });
+}
+async function updateUser(username, patch) {
+  return await sbFetch(`/users?username=eq.${encodeURIComponent(username)}`, {
+    method: 'PATCH',
+    body: JSON.stringify(patch),
+    prefer: 'return=representation'
+  });
+}
+async function deleteUserRow(username) {
+  return await sbFetch(`/users?username=eq.${encodeURIComponent(username)}`, { method: 'DELETE' });
+}
+
+// --- credits table helpers (tracks which month an employee was already credited) ---
+async function isCreditedThisMonth(username, monthKey) {
+  const rows = await sbFetch(`/credits?username=eq.${encodeURIComponent(username)}&month_key=eq.${encodeURIComponent(monthKey)}&select=username`);
+  return !!(rows && rows.length > 0);
+}
+async function markCredited(username, monthKey) {
+  return await sbFetch('/credits', { method: 'POST', body: JSON.stringify({ username, month_key: monthKey }) });
+}
+
+// ===== FLOATING EMOJIS =====
+const EMOJIS = ['⭐','🎉','🌟','🏆','✈️','🎊','💎','🌈','🎈','🚀','💫','🌴','🏖️','🕌','🎁'];
+const bg = document.getElementById('emojiBg');
+EMOJIS.forEach((em, i) => {
+  const s = document.createElement('span');
+  s.textContent = em;
+  s.style.left = (Math.random()*100)+'%';
+  s.style.animationDuration = (15 + Math.random()*20)+'s';
+  s.style.animationDelay = (Math.random()*15)+'s';
+  bg.appendChild(s);
+});
+
+// ===== IN-MEMORY SESSION STATE =====
+// NOTE: browser storage (localStorage/sessionStorage) is not used here, so these
+// reset on page reload. That's expected for a client-only frontend like this one.
+let currentSession = null;  // logged-in employee username
+let isAdminSession = false; // admin logged in?
+
+const MILESTONES = [
+  { pts: 3000, label: 'Bandung & Lembang Trip', icon: '🏔️' },
+  { pts: 7500, label: 'Bali Trip', icon: '🏖️' },
+  { pts: 10000, label: 'Thailand Trip', icon: '🐘' },
+  { pts: 15000, label: 'Turkey Trip', icon: '🕌' },
+  { pts: 25000, label: 'Umroh Trip', icon: '🌙' },
+];
+const MAX_PTS = 25000;
+
+const AVATARS = ['😄','😎','🤩','🥳','🦸','🧙','🐯','🦊','🐸','🐼','🦋','🌟','🎩','👑','🎮','🚀','🍕','🌈'];
+
+// ===== TOAST =====
+let toastTimer;
+function toast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.className = '', 3000);
+}
+
+function confetti() {
+  const c = document.createElement('div');
+  c.className = 'confetti-burst';
+  c.textContent = '🎉';
+  document.body.appendChild(c);
+  setTimeout(() => c.remove(), 1000);
+}
+
+// ===== TABS =====
+function switchTab(n) {
+  document.querySelectorAll('.panel').forEach((p,i) => p.classList.toggle('active', i===n));
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===n));
+  if (n===1) refreshEmpView();
+  if (n===2) refreshAdminView();
+}
+
+// ===== AVATAR GRID =====
+let selectedAvatar = AVATARS[0];
+function buildAvatarGrid() {
+  const g = document.getElementById('avatarGrid');
+  g.innerHTML = '';
+  AVATARS.forEach(em => {
+    const d = document.createElement('div');
+    d.className = 'avatar-opt' + (em===selectedAvatar?' selected':'');
+    d.textContent = em;
+    d.onclick = () => {
+      selectedAvatar = em;
+      document.querySelectorAll('.avatar-opt').forEach(x => x.classList.remove('selected'));
+      d.classList.add('selected');
+    };
+    g.appendChild(d);
+  });
+}
+buildAvatarGrid();
+
+// ===== EMP AUTH VIEWS =====
+function showEmpLogin() {
+  hide('emp-auth'); hide('emp-register'); hide('emp-dashboard');
+  show('emp-login');
+}
+function showEmpRegister() {
+  hide('emp-auth'); hide('emp-login'); hide('emp-dashboard');
+  show('emp-register');
+  buildAvatarGrid();
+}
+function hide(id) { document.getElementById(id).style.display='none'; }
+function show(id) { document.getElementById(id).style.display='block'; }
+
+async function refreshEmpView() {
+  if (!currentSession) {
+    hide('emp-login'); hide('emp-register'); hide('emp-dashboard');
+    document.getElementById('emp-auth').innerHTML = `<div class="card" style="text-align:center;">
+      <div style="font-size:4rem;margin-bottom:.5rem;">👤</div>
+      <h2>Employee Zone</h2>
+      <p style="margin-bottom:1.25rem;">Sign in or create your account!</p>
+      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-pink" onclick="showEmpLogin()">🔑 Login</button>
+        <button class="btn btn-blue" onclick="showEmpRegister()">✨ Register</button>
+      </div>
+    </div>`;
+    show('emp-auth');
+    return;
+  }
+  const user = await getUserByUsername(currentSession);
+  if (!user) { currentSession = null; refreshEmpView(); return; }
+  if (user.status==='pending') {
+    hide('emp-login'); hide('emp-register'); hide('emp-dashboard');
+    const authDiv = document.getElementById('emp-auth');
+    authDiv.innerHTML = `<div class="card" style="text-align:center;">
+      <div style="font-size:3rem;margin-bottom:.5rem;">⏳</div>
+      <h2>Hang tight, ${user.username}!</h2>
+      <p style="color:var(--muted);">Your account is <strong>pending admin approval</strong>. Check back soon! 🙏</p>
+      <button class="btn btn-orange btn-sm" style="margin-top:1rem;" onclick="doLogout()">👋 Logout</button>
+    </div>`;
+    show('emp-auth');
+    return;
+  }
+  renderDashboard(user);
+}
+
+async function doLogin() {
+  const un = document.getElementById('loginUser').value.trim();
+  const pw = document.getElementById('loginPass').value;
+  if (!un||!pw) { toast('Please fill in both fields!','error'); return; }
+  const user = await getUserByUsername(un);
+  if (!user || user.password !== pw) { toast('Wrong username or password! 😬','error'); return; }
+  currentSession = un;
+  toast('Welcome back, '+un+'! 🎉','success');
+  confetti();
+  refreshEmpView();
+}
+
+async function doRegister() {
+  const un = document.getElementById('regUser').value.trim();
+  const pw = document.getElementById('regPass').value;
+  const pw2 = document.getElementById('regPass2').value;
+  if (!un||!pw||!pw2) { toast('Fill in all fields!','error'); return; }
+  if (pw!==pw2) { toast('Passwords don\'t match! 🙈','error'); return; }
+  if (un.length<3) { toast('Username must be at least 3 chars!','error'); return; }
+  if (pw.length<4) { toast('Password must be at least 4 chars!','error'); return; }
+  const existing = await getUserByUsername(un);
+  if (existing) { toast('Username already taken! 😅','error'); return; }
+  try {
+    await insertUser({
+      username: un, password: pw, avatar: selectedAvatar, points: 0,
+      status: 'pending', violations: [], joinedAt: new Date().toISOString()
+    });
+  } catch (e) {
+    console.error(e);
+    toast('Could not create account — check Supabase setup 😵','error');
+    return;
+  }
+  currentSession = un;
+  toast('Account created! Waiting for admin approval... ⏳','success');
+  confetti();
+  refreshEmpView();
+}
+
+function doLogout() {
+  currentSession = null;
+  refreshEmpView();
+  toast('See you! 👋','info');
+}
+
+async function doResetPass() {
+  const old = document.getElementById('oldPass').value;
+  const nw = document.getElementById('newPass').value;
+  const nw2 = document.getElementById('newPass2').value;
+  if (!old||!nw||!nw2) { toast('Fill all fields!','error'); return; }
+  if (nw!==nw2) { toast('New passwords don\'t match!','error'); return; }
+  if (nw.length<4) { toast('New password too short!','error'); return; }
+  const user = await getUserByUsername(currentSession);
+  if (!user || user.password !== old) { toast('Old password is wrong! 🙈','error'); return; }
+  await updateUser(currentSession, { password: nw });
+  toast('Password updated! 🔒✅','success');
+  document.getElementById('oldPass').value='';
+  document.getElementById('newPass').value='';
+  document.getElementById('newPass2').value='';
+}
+
+function renderDashboard(user) {
+  hide('emp-login'); hide('emp-register');
+  show('emp-dashboard');
+
+  document.getElementById('empProfileCard').innerHTML = `
+    <div class="profile-header">
+      <div class="profile-avatar">${user.avatar}</div>
+      <div>
+        <div class="profile-name">${user.username}</div>
+        <div class="profile-status">
+          <span class="badge badge-approved">✅ Approved Employee</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const pts = user.points || 0;
+  document.getElementById('empPointsDisplay').textContent = pts.toLocaleString();
+  const pct = Math.min((pts/MAX_PTS)*100, 100);
+  setTimeout(()=>{ document.getElementById('empTrackFill').style.width = pct+'%'; }, 100);
+
+  const ml = document.getElementById('empMilestones');
+  ml.innerHTML = '';
+  MILESTONES.forEach(m => {
+    const achieved = pts >= m.pts;
+    ml.innerHTML += `<div class="milestone ${achieved?'achieved':''}">
+      <div class="m-icon">${m.icon}</div>
+      <div class="m-pts">${m.pts.toLocaleString()}</div>
+      <div class="m-label">${m.label}${achieved?' ✅':''}</div>
+    </div>`;
+  });
+
+  const nextTrip = MILESTONES.find(m=>pts<m.pts);
+  const banner = document.getElementById('empNextTripBanner');
+  if (nextTrip) {
+    const need = nextTrip.pts - pts;
+    banner.style.display='block';
+    banner.innerHTML = `<div class="card">
+      <div class="trip-banner">
+        <div class="t-icon">${nextTrip.icon}</div>
+        <h3>Next Goal: ${nextTrip.label}!</h3>
+        <p>Only <strong>${need.toLocaleString()} more points</strong> to go! Keep it up! 🔥</p>
+      </div>
+    </div>`;
+  } else {
+    banner.style.display='block';
+    banner.innerHTML = `<div class="card"><div class="trip-banner">
+      <div class="t-icon">🏆</div>
+      <h3>You've unlocked ALL rewards! LEGEND! 🌟</h3>
+      <p>You are the ultimate PointsParty champion!</p>
+    </div></div>`;
+  }
+
+  const vl = document.getElementById('empViolationsList');
+  if (!user.violations || user.violations.length===0) {
+    vl.innerHTML = '<p style="color:var(--green);">No violations! Keep it clean! 😇🌟</p>';
+  } else {
+    vl.innerHTML = user.violations.slice().reverse().map(v=>`
+      <div class="violation-item">
+        <div>
+          <div class="v-reason">${v.reason}</div>
+          <div class="v-date">${new Date(v.date).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</div>
+        </div>
+        <div class="v-pts">−${v.pts} pts</div>
+      </div>`).join('');
+  }
+}
+
+// ===== ADMIN =====
+function refreshAdminView() {
+  if (!isAdminSession) {
+    hide('admin-dashboard'); show('admin-lock');
+  } else {
+    hide('admin-lock'); show('admin-dashboard');
+    renderAdminDashboard();
+  }
+}
+
+function doAdminLogin() {
+  const pw = document.getElementById('adminPassInput').value;
+  if (pw === 'Vairmontque') {
+    isAdminSession = true;
+    toast('Admin access granted! 🔓👑','success');
+    confetti();
+    refreshAdminView();
+  } else {
+    toast('Wrong password! Are you even an admin? 😏','error');
+  }
+}
+
+function doAdminLogout() {
+  isAdminSession = false;
+  document.getElementById('adminPassInput').value='';
+  toast('Admin logged out.','info');
+  hide('admin-dashboard'); show('admin-lock');
+}
+
+async function renderAdminDashboard() {
+  const users = await loadUsers();
+  const pending = users.filter(u=>u.status==='pending');
+  const approved = users.filter(u=>u.status==='approved');
+
+  const pl = document.getElementById('pendingList');
+  pl.innerHTML = pending.length===0 ? '<p style="color:var(--green);">No pending accounts! All clear! 🎉</p>'
+    : pending.map(u=>`
+      <div class="pending-item">
+        <div class="pending-info">
+          <div class="pending-avatar">${u.avatar}</div>
+          <div>
+            <div class="pending-name">${u.username}</div>
+            <span class="badge badge-pending">Pending</span>
+          </div>
+        </div>
+        <div class="pending-actions">
+          <button class="btn btn-green btn-sm" onclick="approveUser('${u.username}')">✅ Approve</button>
+          <button class="btn btn-orange btn-sm" onclick="rejectUser('${u.username}')">❌ Reject</button>
+        </div>
+      </div>`).join('');
+
+  const el = document.getElementById('employeeList');
+  el.innerHTML = approved.length===0 ? '<p style="color:var(--muted);">No approved employees yet.</p>'
+    : approved.map(u=>`
+      <div class="employee-row">
+        <div class="er-avatar">${u.avatar}</div>
+        <div class="er-info">
+          <div class="er-name">${u.username}</div>
+          <div style="font-size:.8rem;color:var(--muted);">${(u.violations||[]).length} violation(s)</div>
+        </div>
+        <div class="er-pts">${(u.points||0).toLocaleString()} pts</div>
+      </div>`).join('');
+
+  const now = new Date();
+  const monthKey = `${now.getFullYear()}-${now.getMonth()}`;
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const ml = document.getElementById('monthlyPointsList');
+  if (approved.length === 0) {
+    ml.innerHTML = '<p style="color:var(--muted);">No approved employees yet.</p>';
+  } else {
+    const rows = await Promise.all(approved.map(async u => {
+      const alreadyCredited = await isCreditedThisMonth(u.username, monthKey);
+      return `<div class="monthly-row">
+        <div style="font-size:1.6rem;">${u.avatar}</div>
+        <div class="mr-info">
+          <div class="mr-name">${u.username}</div>
+          <div class="mr-sub">${alreadyCredited
+            ? `✅ Already credited for ${monthNames[now.getMonth()]} ${now.getFullYear()}`
+            : `⏳ Not yet credited for ${monthNames[now.getMonth()]} ${now.getFullYear()}`
+          }</div>
+        </div>
+        <div class="mr-pts">${(u.points||0).toLocaleString()} pts</div>
+        <button class="btn btn-sm ${alreadyCredited ? 'btn-orange' : 'btn-green'}"
+          onclick="creditMonthlyPoints('${u.username}')"
+          ${alreadyCredited ? 'style="opacity:.5;cursor:not-allowed;"' : ''}>
+          ${alreadyCredited ? '✅ Done' : '💰 Credit +500'}
+        </button>
+      </div>`;
+    }));
+    ml.innerHTML = rows.join('');
+  }
+  const vt = document.getElementById('violationTarget');
+  vt.innerHTML = '<option value="">-- Select Employee --</option>' +
+    approved.map(u=>`<option value="${u.username}">${u.avatar} ${u.username} (${(u.points||0).toLocaleString()} pts)</option>`).join('');
+}
+
+async function approveUser(un) {
+  await updateUser(un, { status: 'approved', points: 0 });
+  toast(un+' approved! 🎉 They can now earn points!','success');
+  confetti();
+  renderAdminDashboard();
+}
+
+async function rejectUser(un) {
+  if (!confirm('Delete account for '+un+'? This cannot be undone.')) return;
+  await deleteUserRow(un);
+  toast(un+' rejected and removed.','info');
+  renderAdminDashboard();
+}
+
+function handleViolationTypeChange() {
+  const val = document.getElementById('violationType').value;
+  document.getElementById('customPtsRow').style.display = val==='custom'?'block':'none';
+}
+
+async function issueViolation() {
+  const target = document.getElementById('violationTarget').value;
+  const typeVal = document.getElementById('violationType').value;
+  const reason = document.getElementById('violationReason').value.trim();
+
+  if (!target) { toast('Select an employee!','error'); return; }
+  if (!reason) { toast('Provide a reason!','error'); return; }
+
+  let pts;
+  if (typeVal==='custom') {
+    pts = parseInt(document.getElementById('customPts').value);
+    if (!pts||pts<1) { toast('Enter valid custom points!','error'); return; }
+  } else {
+    pts = parseInt(typeVal);
+  }
+
+  const user = await getUserByUsername(target);
+  if (!user) { toast('Employee not found!','error'); return; }
+  const newPts = Math.max(0, (user.points||0) - pts);
+  const violations = user.violations || [];
+  violations.push({ pts, reason, date: new Date().toISOString() });
+  await updateUser(target, { points: newPts, violations });
+  toast('⚡ Violation issued to '+target+'! −'+pts+' pts','success');
+  document.getElementById('violationReason').value='';
+  document.getElementById('customPts').value='';
+  renderAdminDashboard();
+}
+
+async function creditMonthlyPoints(username) {
+  const now = new Date();
+  const monthKey = `${now.getFullYear()}-${now.getMonth()}`;
+  const already = await isCreditedThisMonth(username, monthKey);
+  if (already) {
+    toast(`${username} already got their points this month! 🙅`, 'error');
+    return;
+  }
+  const user = await getUserByUsername(username);
+  if (!user) { toast('Employee not found!', 'error'); return; }
+  await updateUser(username, { points: (user.points || 0) + 500 });
+  await markCredited(username, monthKey);
+  toast(`💰 +500 pts credited to ${username}!`, 'success');
+  confetti();
+  renderAdminDashboard();
+  if (currentSession === username) refreshEmpView();
+}
+
+// Init
+refreshEmpView();
+</script>
+</body>
+</html>
