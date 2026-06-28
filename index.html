@@ -33,7 +33,6 @@
     overflow-x: hidden;
   }
 
-  /* ===== FLOATING EMOJIS BG ===== */
   .emoji-bg {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none; z-index: 0; overflow: hidden;
@@ -51,7 +50,6 @@
     100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
   }
 
-  /* ===== HEADER ===== */
   header {
     position: relative; z-index: 10;
     text-align: center;
@@ -71,7 +69,6 @@
   @keyframes rainbow { 0%{background-position:0%} 100%{background-position:300%} }
   header p { color: var(--muted); font-size: 1rem; margin-top: .4rem; }
 
-  /* ===== TABS ===== */
   .tabs {
     display: flex; justify-content: center; gap: .75rem;
     padding: 1.5rem 1rem;
@@ -101,7 +98,6 @@
   .tab-btn.t2 { background: linear-gradient(135deg, var(--orange), var(--red)); color: white; }
   .tab-btn.active { transform: scale(1.1); box-shadow: 0 0 25px rgba(255,255,255,.3); }
 
-  /* ===== PANELS ===== */
   .panel {
     display: none;
     max-width: 900px;
@@ -113,7 +109,6 @@
   .panel.active { display: block; }
   @keyframes slideIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 
-  /* ===== CARDS ===== */
   .card {
     background: var(--card);
     border-radius: 20px;
@@ -140,7 +135,6 @@
     margin-bottom: .4rem;
   }
 
-  /* ===== FORM ELEMENTS ===== */
   input, select, textarea {
     width: 100%;
     background: rgba(255,255,255,.07);
@@ -163,7 +157,6 @@
   select option { background: #1A1035; }
   label { font-weight: 700; font-size: .9rem; display: block; }
 
-  /* ===== BUTTONS ===== */
   .btn {
     font-family: 'Fredoka One', cursive;
     font-size: 1rem;
@@ -180,10 +173,10 @@
   .btn-green { background: linear-gradient(135deg, var(--green), var(--cyan)); color: white; }
   .btn-orange { background: linear-gradient(135deg, var(--orange), var(--red)); color: white; }
   .btn-yellow { background: linear-gradient(135deg, var(--yellow), var(--orange)); color: #1A1035; }
+  .btn-red { background: linear-gradient(135deg, #EF4444, #B91C1C); color: white; }
   .btn-sm { font-size: .85rem; padding: .45rem 1.1rem; }
   .btn-full { width: 100%; text-align: center; display: block; }
 
-  /* ===== TOAST ===== */
   #toast {
     position: fixed; bottom: 2rem; right: 2rem;
     padding: .9rem 1.6rem;
@@ -202,7 +195,6 @@
   #toast.error { background: linear-gradient(135deg, #EF4444, #F97316); color: white; }
   #toast.info { background: linear-gradient(135deg, #A855F7, #3B82F6); color: white; }
 
-  /* ===== AVATAR PICKER ===== */
   .avatar-grid {
     display: flex; flex-wrap: wrap; gap: .5rem;
     margin-bottom: 1rem;
@@ -220,7 +212,6 @@
   .avatar-opt:hover { background: rgba(255,255,255,.14); transform: scale(1.1); }
   .avatar-opt.selected { border-color: var(--pink); background: rgba(255,107,157,.2); transform: scale(1.15); }
 
-  /* ===== EMPLOYEE DASHBOARD ===== */
   .profile-header {
     display: flex; align-items: center; gap: 1.2rem;
     margin-bottom: 1rem;
@@ -235,7 +226,6 @@
   .profile-name { font-family: 'Fredoka One', cursive; font-size: 1.6rem; }
   .profile-status { font-size: .85rem; color: var(--muted); margin-top: .1rem; }
 
-  /* ===== POINTS DISPLAY ===== */
   .points-big {
     font-family: 'Fredoka One', cursive;
     font-size: 3.5rem;
@@ -245,11 +235,7 @@
     background-clip: text;
   }
 
-  /* ===== PROGRESS GRAPHIC ===== */
-  .reward-track {
-    position: relative;
-    padding: 1rem 0;
-  }
+  .reward-track { position: relative; padding: 1rem 0; }
   .track-bar {
     height: 16px;
     border-radius: 50px;
@@ -292,7 +278,6 @@
   .milestone .m-icon { font-size: 1.4rem; }
   .milestone .m-label { font-size: .75rem; color: var(--muted); margin-top: .2rem; }
 
-  /* ===== VIOLATIONS LIST ===== */
   .violation-item {
     background: rgba(239,68,68,.1);
     border: 1px solid rgba(239,68,68,.25);
@@ -303,70 +288,14 @@
     gap: .5rem;
   }
   .violation-item .v-reason { font-size: .9rem; flex: 1; }
-  .violation-item .v-pts {
-    font-family: 'Fredoka One', cursive;
-    color: var(--red);
-    font-size: 1rem;
-    white-space: nowrap;
-  }
+  .violation-item .v-pts { font-family: 'Fredoka One', cursive; color: var(--red); font-size: 1rem; white-space: nowrap; }
   .violation-item .v-date { font-size: .75rem; color: var(--muted); }
 
-  /* ===== ADMIN PANEL ===== */
-  .pending-item {
-    background: rgba(255,255,255,.05);
-    border-radius: 14px;
-    padding: .9rem 1.1rem;
-    margin-bottom: .7rem;
-    display: flex; align-items: center; justify-content: space-between;
-    gap: .5rem;
-    flex-wrap: wrap;
-  }
-  .pending-info { display: flex; align-items: center; gap: .8rem; }
-  .pending-avatar { font-size: 1.8rem; }
-  .pending-name { font-weight: 800; }
-  .pending-actions { display: flex; gap: .5rem; }
-
-  .employee-row {
-    background: rgba(255,255,255,.04);
-    border-radius: 14px;
-    padding: .85rem 1.1rem;
-    margin-bottom: .6rem;
-    display: flex; align-items: center; gap: .8rem;
-    flex-wrap: wrap;
-  }
-  .employee-row .er-avatar { font-size: 1.6rem; }
-  .employee-row .er-info { flex: 1; min-width: 100px; }
-  .employee-row .er-name { font-weight: 800; font-size: .95rem; }
-  .employee-row .er-pts { font-family: 'Fredoka One', cursive; color: var(--yellow); font-size: 1.1rem; }
-
-  /* ===== BADGES ===== */
-  .badge {
-    display: inline-block;
-    font-size: .72rem;
-    font-weight: 800;
-    padding: .2rem .6rem;
-    border-radius: 50px;
-    text-transform: uppercase;
-    letter-spacing: .05em;
-  }
-  .badge-pending { background: rgba(252,211,77,.2); color: var(--yellow); }
-  .badge-approved { background: rgba(34,197,94,.2); color: var(--green); }
-  .badge-suspended { background: rgba(239,68,68,.2); color: var(--red); }
-
-  /* ===== ADMIN LOGIN ===== */
-  .admin-lock {
-    text-align: center;
-    padding: 3rem 1rem;
-  }
+  .admin-lock { text-align: center; padding: 3rem 1rem; }
   .lock-icon { font-size: 4rem; margin-bottom: 1rem; }
   .admin-lock h2 { font-family: 'Fredoka One', cursive; font-size: 1.8rem; margin-bottom: .5rem; }
 
-  /* ===== SECTION DIVIDER ===== */
-  .divider {
-    height: 1px;
-    background: rgba(255,255,255,.08);
-    margin: 1.5rem 0;
-  }
+  .divider { height: 1px; background: rgba(255,255,255,.08); margin: 1.5rem 0; }
 
   .confetti-burst {
     position: fixed; top: 50%; left: 50%;
@@ -383,7 +312,6 @@
     100% { opacity: 0; transform: translate(-50%,-70%) scale(2); }
   }
 
-  /* ===== INFO PANEL SPECIFICS ===== */
   .how-step {
     display: flex; gap: 1rem; align-items: flex-start;
     margin-bottom: 1rem;
@@ -431,6 +359,47 @@
   .vt-grande { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.2); }
   .vt-custom { background: rgba(168,85,247,.1); border: 1px solid rgba(168,85,247,.2); }
 
+  .pending-item {
+    background: rgba(255,255,255,.05);
+    border-radius: 14px;
+    padding: .9rem 1.1rem;
+    margin-bottom: .7rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: .5rem;
+    flex-wrap: wrap;
+  }
+  .pending-info { display: flex; align-items: center; gap: .8rem; }
+  .pending-avatar { font-size: 1.8rem; }
+  .pending-name { font-weight: 800; }
+  .pending-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+  .employee-row {
+    background: rgba(255,255,255,.04);
+    border-radius: 14px;
+    padding: .85rem 1.1rem;
+    margin-bottom: .6rem;
+    display: flex; align-items: center; gap: .8rem;
+    flex-wrap: wrap;
+  }
+  .employee-row .er-avatar { font-size: 1.6rem; }
+  .employee-row .er-info { flex: 1; min-width: 100px; }
+  .employee-row .er-name { font-weight: 800; font-size: .95rem; }
+  .employee-row .er-pts { font-family: 'Fredoka One', cursive; color: var(--yellow); font-size: 1.1rem; }
+  .employee-row .er-actions { display: flex; gap: .5rem; align-items: center; }
+
+  .badge {
+    display: inline-block;
+    font-size: .72rem;
+    font-weight: 800;
+    padding: .2rem .6rem;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  .badge-pending { background: rgba(252,211,77,.2); color: var(--yellow); }
+  .badge-approved { background: rgba(34,197,94,.2); color: var(--green); }
+  .badge-suspended { background: rgba(239,68,68,.2); color: var(--red); }
+
   .monthly-row {
     background: rgba(255,255,255,.04);
     border-radius: 14px;
@@ -443,7 +412,6 @@
   .monthly-row .mr-name { font-weight: 800; font-size: .95rem; }
   .monthly-row .mr-sub { font-size: .78rem; color: var(--muted); margin-top: .1rem; }
   .monthly-row .mr-pts { font-family: 'Fredoka One', cursive; color: var(--yellow); font-size: 1.1rem; margin-right: .5rem; }
-  .flex-row > * { flex: 1; min-width: 140px; }
 
   .trip-banner {
     text-align: center;
@@ -462,6 +430,44 @@
   .trip-banner h3 { font-family: 'Fredoka One', cursive; font-size: 1.4rem; margin-top: .5rem; }
   .trip-banner p { font-size: .9rem; color: var(--muted); }
 
+  /* Loading spinner */
+  .spinner {
+    display: inline-block;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin .6s linear infinite;
+    vertical-align: middle;
+    margin-right: .4rem;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Confirm modal overlay */
+  #confirmModal {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.7);
+    z-index: 99998;
+    align-items: center;
+    justify-content: center;
+  }
+  #confirmModal.show { display: flex; }
+  .confirm-box {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 380px;
+    width: 90%;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.1);
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  }
+  .confirm-box .c-icon { font-size: 3rem; margin-bottom: .75rem; }
+  .confirm-box h3 { font-family: 'Fredoka One', cursive; font-size: 1.4rem; margin-bottom: .5rem; }
+  .confirm-box p { color: var(--muted); font-size: .9rem; margin-bottom: 1.25rem; }
+  .confirm-actions { display: flex; gap: .75rem; justify-content: center; }
+
   @media (max-width: 600px) {
     .profile-header { flex-direction: column; text-align: center; }
     .points-big { font-size: 2.5rem; }
@@ -470,7 +476,6 @@
 </head>
 <body>
 
-<!-- Floating emoji background -->
 <div class="emoji-bg" id="emojiBg"></div>
 
 <header>
@@ -478,7 +483,6 @@
   <p>Work hard. Earn points. Travel the world! ✈️🌍</p>
 </header>
 
-<!-- TABS -->
 <div class="tabs">
   <button class="tab-btn t0 active" onclick="switchTab(0)">📖 Info & Guide</button>
   <button class="tab-btn t1" onclick="switchTab(1)">👤 Employee Zone</button>
@@ -487,7 +491,6 @@
 
 <!-- ========== PANEL 0: INFO ========== -->
 <div class="panel active" id="panel0">
-
   <div class="card">
     <h2>👋 Welcome to PointsParty!</h2>
     <p>This is your company's super-fun reward tracking system! Every month you earn points, stay professional, and unlock epic travel rewards. Let's go! 🚀</p>
@@ -528,31 +531,11 @@
   <div class="card">
     <h2>🏆 Reward Milestones</h2>
     <div class="milestones">
-      <div class="milestone">
-        <div class="m-icon">🏔️</div>
-        <div class="m-pts">3,000</div>
-        <div class="m-label">Bandung & Lembang Trip</div>
-      </div>
-      <div class="milestone">
-        <div class="m-icon">🏖️</div>
-        <div class="m-pts">7,500</div>
-        <div class="m-label">Bali Trip</div>
-      </div>
-      <div class="milestone">
-        <div class="m-icon">🐘</div>
-        <div class="m-pts">10,000</div>
-        <div class="m-label">Thailand Trip</div>
-      </div>
-      <div class="milestone">
-        <div class="m-icon">🕌</div>
-        <div class="m-pts">15,000</div>
-        <div class="m-label">Turkey Trip</div>
-      </div>
-      <div class="milestone">
-        <div class="m-icon">🌙</div>
-        <div class="m-pts">25,000</div>
-        <div class="m-label">Umroh Trip</div>
-      </div>
+      <div class="milestone"><div class="m-icon">🏔️</div><div class="m-pts">3,000</div><div class="m-label">Bandung & Lembang Trip</div></div>
+      <div class="milestone"><div class="m-icon">🏖️</div><div class="m-pts">7,500</div><div class="m-label">Bali Trip</div></div>
+      <div class="milestone"><div class="m-icon">🐘</div><div class="m-pts">10,000</div><div class="m-label">Thailand Trip</div></div>
+      <div class="milestone"><div class="m-icon">🕌</div><div class="m-pts">15,000</div><div class="m-label">Turkey Trip</div></div>
+      <div class="milestone"><div class="m-icon">🌙</div><div class="m-pts">25,000</div><div class="m-label">Umroh Trip</div></div>
     </div>
   </div>
 
@@ -561,34 +544,22 @@
     <p style="margin-bottom:.75rem;">Violations cause point deductions. Stay professional! 😇</p>
     <div class="violation-type-card vt-mini">
       <div class="vt-icon">🐣</div>
-      <div class="vt-info">
-        <h4>Mini Tiny Violation</h4>
-        <p>Small slip-ups, minor issues</p>
-      </div>
+      <div class="vt-info"><h4>Mini Tiny Violation</h4><p>Small slip-ups, minor issues</p></div>
       <div class="vt-pts" style="color:var(--yellow);">-50 pts</div>
     </div>
     <div class="violation-type-card vt-medium">
       <div class="vt-icon">😬</div>
-      <div class="vt-info">
-        <h4>Not So Mini Violation</h4>
-        <p>Medium-level infractions</p>
-      </div>
+      <div class="vt-info"><h4>Not So Mini Violation</h4><p>Medium-level infractions</p></div>
       <div class="vt-pts" style="color:var(--orange);">-100 pts</div>
     </div>
     <div class="violation-type-card vt-grande">
       <div class="vt-icon">💀</div>
-      <div class="vt-info">
-        <h4>Grande Violation</h4>
-        <p>Serious rule-breaking — yikes!</p>
-      </div>
+      <div class="vt-info"><h4>Grande Violation</h4><p>Serious rule-breaking — yikes!</p></div>
       <div class="vt-pts" style="color:var(--red);">-200 pts</div>
     </div>
     <div class="violation-type-card vt-custom">
       <div class="vt-icon">🛸</div>
-      <div class="vt-info">
-        <h4>Custom Violation</h4>
-        <p>Admin-defined, any amount</p>
-      </div>
+      <div class="vt-info"><h4>Custom Violation</h4><p>Admin-defined, any amount</p></div>
       <div class="vt-pts" style="color:var(--purple);">Custom pts</div>
     </div>
   </div>
@@ -622,7 +593,6 @@
 
 <!-- ========== PANEL 1: EMPLOYEE ========== -->
 <div class="panel" id="panel1">
-  <!-- AUTH STATE: login/register/dashboard -->
   <div id="emp-auth">
     <div class="card" style="text-align:center;">
       <div style="font-size:4rem;margin-bottom:.5rem;">👤</div>
@@ -635,7 +605,6 @@
     </div>
   </div>
 
-  <!-- LOGIN FORM -->
   <div id="emp-login" style="display:none;">
     <div class="card">
       <h2>🔑 Welcome Back!</h2>
@@ -650,7 +619,6 @@
     </div>
   </div>
 
-  <!-- REGISTER FORM -->
   <div id="emp-register" style="display:none;">
     <div class="card">
       <h2>✨ Create Account</h2>
@@ -669,12 +637,8 @@
     </div>
   </div>
 
-  <!-- EMPLOYEE DASHBOARD -->
   <div id="emp-dashboard" style="display:none;">
-    <div class="card" id="empProfileCard">
-      <!-- filled by JS -->
-    </div>
-
+    <div class="card" id="empProfileCard"></div>
     <div class="card">
       <h2>📈 Your Points Thermometer</h2>
       <div class="reward-track">
@@ -688,9 +652,7 @@
         <div class="milestones" id="empMilestones"></div>
       </div>
     </div>
-
     <div id="empNextTripBanner" style="display:none;"></div>
-
     <div class="card">
       <h2>🔄 Reset Password</h2>
       <label>Old Password</label>
@@ -701,12 +663,10 @@
       <input type="password" id="newPass2" placeholder="Confirm...">
       <button class="btn btn-yellow" onclick="doResetPass()">🔄 Update Password</button>
     </div>
-
     <div class="card" id="empViolationsCard">
       <h2>⚡ Violation History</h2>
       <div id="empViolationsList"></div>
     </div>
-
     <div style="text-align:center;margin-top:.5rem;">
       <button class="btn btn-orange btn-sm" onclick="doLogout()">👋 Logout</button>
     </div>
@@ -715,8 +675,6 @@
 
 <!-- ========== PANEL 2: ADMIN ========== -->
 <div class="panel" id="panel2">
-
-  <!-- ADMIN LOGIN -->
   <div id="admin-lock" class="card admin-lock">
     <div class="lock-icon">🔐</div>
     <h2>Admin Access Only!</h2>
@@ -725,17 +683,15 @@
     <button class="btn btn-orange" onclick="doAdminLogin()">🔓 Unlock Admin Panel</button>
   </div>
 
-  <!-- ADMIN DASHBOARD -->
   <div id="admin-dashboard" style="display:none;">
-
     <div class="card">
       <h2>⏳ Pending Accounts</h2>
-      <div id="pendingList"><p style="color:var(--muted);">No pending accounts! 🎉</p></div>
+      <div id="pendingList"><p style="color:var(--muted);">Loading... ⏳</p></div>
     </div>
 
     <div class="card">
       <h2>👥 Approved Employees</h2>
-      <div id="employeeList"><p style="color:var(--muted);">No approved employees yet.</p></div>
+      <div id="employeeList"><p style="color:var(--muted);">Loading... ⏳</p></div>
     </div>
 
     <div class="card">
@@ -762,8 +718,8 @@
 
     <div class="card">
       <h2>📅 Monthly Points — Credit 500 pts</h2>
-      <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem;">Each employee gets <strong>+500 points</strong> every month. Use the buttons below to credit a specific employee for the current month. You can only credit each employee <strong>once per month</strong>.</p>
-      <div id="monthlyPointsList"><p style="color:var(--muted);">No approved employees yet.</p></div>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem;">Each employee gets <strong>+500 points</strong> every month. You can only credit each employee <strong>once per month</strong>.</p>
+      <div id="monthlyPointsList"><p style="color:var(--muted);">Loading... ⏳</p></div>
     </div>
 
     <div style="text-align:center;margin-top:.5rem;">
@@ -774,80 +730,75 @@
 
 <div id="toast"></div>
 
+<!-- Confirm Modal -->
+<div id="confirmModal">
+  <div class="confirm-box">
+    <div class="c-icon" id="confirmIcon">🗑️</div>
+    <h3 id="confirmTitle">Are you sure?</h3>
+    <p id="confirmMsg">This action cannot be undone.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-orange btn-sm" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-red btn-sm" id="confirmOkBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// ===== SUPABASE CONFIG =====
+// ===== CONFIG =====
 const SUPABASE_URL = 'https://yfqnuworomwehxdevchf.supabase.co/rest/v1';
 const SUPABASE_KEY = 'sb_publishable_jfhEtOx22magl34soCaJ8w_aM8TnkdV';
 
-async function sbFetch(path, options = {}) {
-  const res = await fetch(`${SUPABASE_URL}${path}`, {
-    ...options,
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': options.prefer || 'return=representation',
-      ...(options.headers || {})
-    }
+const HEADERS = {
+  'apikey': SUPABASE_KEY,
+  'Authorization': `Bearer ${SUPABASE_KEY}`,
+  'Content-Type': 'application/json',
+  'Prefer': 'return=representation'
+};
+
+// ===== SUPABASE API HELPERS =====
+async function sbGet(table, params = '') {
+  const res = await fetch(`${SUPABASE_URL}/${table}?${params}`, {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
   });
-  if (!res.ok) {
-    let errText = '';
-    try { errText = await res.text(); } catch {}
-    throw new Error(`Supabase ${res.status}: ${errText}`);
-  }
-  const text = await res.text();
-  return text ? JSON.parse(text) : null;
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
 }
 
-// --- users table helpers ---
-async function loadUsers() {
-  try { return (await sbFetch('/users?select=*&order=joinedAt.asc')) || []; }
-  catch (e) { console.error(e); toast('Failed to load users from Supabase 😵', 'error'); return []; }
+async function sbPost(table, data) {
+  const res = await fetch(`${SUPABASE_URL}/${table}`, {
+    method: 'POST',
+    headers: HEADERS,
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
 }
-async function getUserByUsername(username) {
-  const rows = await sbFetch(`/users?username=eq.${encodeURIComponent(username)}&select=*`);
-  return (rows && rows[0]) || null;
-}
-async function insertUser(user) {
-  return await sbFetch('/users', { method: 'POST', body: JSON.stringify(user) });
-}
-async function updateUser(username, patch) {
-  return await sbFetch(`/users?username=eq.${encodeURIComponent(username)}`, {
+
+async function sbPatch(table, filter, data) {
+  const res = await fetch(`${SUPABASE_URL}/${table}?${filter}`, {
     method: 'PATCH',
-    body: JSON.stringify(patch),
-    prefer: 'return=representation'
+    headers: HEADERS,
+    body: JSON.stringify(data)
   });
-}
-async function deleteUserRow(username) {
-  return await sbFetch(`/users?username=eq.${encodeURIComponent(username)}`, { method: 'DELETE' });
-}
-
-// --- credits table helpers (tracks which month an employee was already credited) ---
-async function isCreditedThisMonth(username, monthKey) {
-  const rows = await sbFetch(`/credits?username=eq.${encodeURIComponent(username)}&month_key=eq.${encodeURIComponent(monthKey)}&select=username`);
-  return !!(rows && rows.length > 0);
-}
-async function markCredited(username, monthKey) {
-  return await sbFetch('/credits', { method: 'POST', body: JSON.stringify({ username, month_key: monthKey }) });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
 }
 
-// ===== FLOATING EMOJIS =====
-const EMOJIS = ['⭐','🎉','🌟','🏆','✈️','🎊','💎','🌈','🎈','🚀','💫','🌴','🏖️','🕌','🎁'];
-const bg = document.getElementById('emojiBg');
-EMOJIS.forEach((em, i) => {
-  const s = document.createElement('span');
-  s.textContent = em;
-  s.style.left = (Math.random()*100)+'%';
-  s.style.animationDuration = (15 + Math.random()*20)+'s';
-  s.style.animationDelay = (Math.random()*15)+'s';
-  bg.appendChild(s);
-});
+async function sbDelete(table, filter) {
+  const res = await fetch(`${SUPABASE_URL}/${table}?${filter}`, {
+    method: 'DELETE',
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Prefer': 'return=representation' }
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
 
-// ===== IN-MEMORY SESSION STATE =====
-// NOTE: browser storage (localStorage/sessionStorage) is not used here, so these
-// reset on page reload. That's expected for a client-only frontend like this one.
-let currentSession = null;  // logged-in employee username
-let isAdminSession = false; // admin logged in?
+// ===== LOCAL SESSION (no user secrets in supabase, just identity) =====
+function loadSession() { try { return JSON.parse(localStorage.getItem('pp_session')); } catch { return null; } }
+function saveSession(s) { localStorage.setItem('pp_session', JSON.stringify(s)); }
+function clearSession() { localStorage.removeItem('pp_session'); }
+function loadAdminSession() { return localStorage.getItem('pp_admin') === 'true'; }
+function saveAdminSession(v) { localStorage.setItem('pp_admin', v ? 'true' : 'false'); }
 
 const MILESTONES = [
   { pts: 3000, label: 'Bandung & Lembang Trip', icon: '🏔️' },
@@ -857,8 +808,19 @@ const MILESTONES = [
   { pts: 25000, label: 'Umroh Trip', icon: '🌙' },
 ];
 const MAX_PTS = 25000;
-
 const AVATARS = ['😄','😎','🤩','🥳','🦸','🧙','🐯','🦊','🐸','🐼','🦋','🌟','🎩','👑','🎮','🚀','🍕','🌈'];
+
+// ===== FLOATING EMOJIS =====
+const EMOJIS = ['⭐','🎉','🌟','🏆','✈️','🎊','💎','🌈','🎈','🚀','💫','🌴','🏖️','🕌','🎁'];
+const bg = document.getElementById('emojiBg');
+EMOJIS.forEach(em => {
+  const s = document.createElement('span');
+  s.textContent = em;
+  s.style.left = (Math.random()*100)+'%';
+  s.style.animationDuration = (15 + Math.random()*20)+'s';
+  s.style.animationDelay = (Math.random()*15)+'s';
+  bg.appendChild(s);
+});
 
 // ===== TOAST =====
 let toastTimer;
@@ -867,7 +829,7 @@ function toast(msg, type='info') {
   t.textContent = msg;
   t.className = 'show ' + type;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.className = '', 3000);
+  toastTimer = setTimeout(() => t.className = '', 3500);
 }
 
 function confetti() {
@@ -877,6 +839,25 @@ function confetti() {
   document.body.appendChild(c);
   setTimeout(() => c.remove(), 1000);
 }
+
+// ===== CONFIRM MODAL =====
+let confirmCallback = null;
+function showConfirm(icon, title, msg, btnLabel, cb) {
+  document.getElementById('confirmIcon').textContent = icon;
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMsg').textContent = msg;
+  document.getElementById('confirmOkBtn').textContent = btnLabel;
+  confirmCallback = cb;
+  document.getElementById('confirmModal').classList.add('show');
+}
+function closeConfirm() {
+  document.getElementById('confirmModal').classList.remove('show');
+  confirmCallback = null;
+}
+document.getElementById('confirmOkBtn').addEventListener('click', () => {
+  if (confirmCallback) confirmCallback();
+  closeConfirm();
+});
 
 // ===== TABS =====
 function switchTab(n) {
@@ -915,51 +896,69 @@ function showEmpRegister() {
   show('emp-register');
   buildAvatarGrid();
 }
-function hide(id) { document.getElementById(id).style.display='none'; }
-function show(id) { document.getElementById(id).style.display='block'; }
+function hide(id) { const el = document.getElementById(id); if(el) el.style.display='none'; }
+function show(id) { const el = document.getElementById(id); if(el) el.style.display='block'; }
 
 async function refreshEmpView() {
-  if (!currentSession) {
+  const sess = loadSession();
+  if (!sess) {
     hide('emp-login'); hide('emp-register'); hide('emp-dashboard');
-    document.getElementById('emp-auth').innerHTML = `<div class="card" style="text-align:center;">
-      <div style="font-size:4rem;margin-bottom:.5rem;">👤</div>
-      <h2>Employee Zone</h2>
-      <p style="margin-bottom:1.25rem;">Sign in or create your account!</p>
-      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
-        <button class="btn btn-pink" onclick="showEmpLogin()">🔑 Login</button>
-        <button class="btn btn-blue" onclick="showEmpRegister()">✨ Register</button>
-      </div>
-    </div>`;
+    restoreEmpAuthDefault();
     show('emp-auth');
     return;
   }
-  const user = await getUserByUsername(currentSession);
-  if (!user) { currentSession = null; refreshEmpView(); return; }
-  if (user.status==='pending') {
-    hide('emp-login'); hide('emp-register'); hide('emp-dashboard');
-    const authDiv = document.getElementById('emp-auth');
-    authDiv.innerHTML = `<div class="card" style="text-align:center;">
-      <div style="font-size:3rem;margin-bottom:.5rem;">⏳</div>
-      <h2>Hang tight, ${user.username}!</h2>
-      <p style="color:var(--muted);">Your account is <strong>pending admin approval</strong>. Check back soon! 🙏</p>
-      <button class="btn btn-orange btn-sm" style="margin-top:1rem;" onclick="doLogout()">👋 Logout</button>
-    </div>`;
-    show('emp-auth');
-    return;
+  try {
+    const users = await sbGet('employees', `username=eq.${encodeURIComponent(sess.username)}`);
+    if (!users || users.length === 0) { clearSession(); refreshEmpView(); return; }
+    const user = users[0];
+    if (user.status === 'pending') {
+      hide('emp-login'); hide('emp-register'); hide('emp-dashboard');
+      const authDiv = document.getElementById('emp-auth');
+      authDiv.innerHTML = `<div class="card" style="text-align:center;">
+        <div style="font-size:3rem;margin-bottom:.5rem;">⏳</div>
+        <h2>Hang tight, ${user.username}!</h2>
+        <p style="color:var(--muted);">Your account is <strong>pending admin approval</strong>. Check back soon! 🙏</p>
+        <button class="btn btn-orange btn-sm" style="margin-top:1rem;" onclick="doLogout()">👋 Logout</button>
+      </div>`;
+      show('emp-auth');
+      return;
+    }
+    renderDashboard(user);
+  } catch(e) {
+    toast('Connection error. Check your network. 😬', 'error');
+    console.error(e);
   }
-  renderDashboard(user);
+}
+
+function restoreEmpAuthDefault() {
+  const authDiv = document.getElementById('emp-auth');
+  authDiv.innerHTML = `<div class="card" style="text-align:center;">
+    <div style="font-size:4rem;margin-bottom:.5rem;">👤</div>
+    <h2>Employee Zone</h2>
+    <p style="margin-bottom:1.25rem;">Sign in or create your account!</p>
+    <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-pink" onclick="showEmpLogin()">🔑 Login</button>
+      <button class="btn btn-blue" onclick="showEmpRegister()">✨ Register</button>
+    </div>
+  </div>`;
 }
 
 async function doLogin() {
   const un = document.getElementById('loginUser').value.trim();
   const pw = document.getElementById('loginPass').value;
   if (!un||!pw) { toast('Please fill in both fields!','error'); return; }
-  const user = await getUserByUsername(un);
-  if (!user || user.password !== pw) { toast('Wrong username or password! 😬','error'); return; }
-  currentSession = un;
-  toast('Welcome back, '+un+'! 🎉','success');
-  confetti();
-  refreshEmpView();
+  try {
+    const users = await sbGet('employees', `username=eq.${encodeURIComponent(un)}&password=eq.${encodeURIComponent(pw)}`);
+    if (!users || users.length === 0) { toast('Wrong username or password! 😬','error'); return; }
+    saveSession({ username: un });
+    toast('Welcome back, '+un+'! 🎉','success');
+    confetti();
+    hide('emp-login');
+    refreshEmpView();
+  } catch(e) {
+    toast('Login failed. Try again! 😬','error');
+    console.error(e);
+  }
 }
 
 async function doRegister() {
@@ -967,51 +966,65 @@ async function doRegister() {
   const pw = document.getElementById('regPass').value;
   const pw2 = document.getElementById('regPass2').value;
   if (!un||!pw||!pw2) { toast('Fill in all fields!','error'); return; }
-  if (pw!==pw2) { toast('Passwords don\'t match! 🙈','error'); return; }
+  if (pw!==pw2) { toast("Passwords don't match! 🙈",'error'); return; }
   if (un.length<3) { toast('Username must be at least 3 chars!','error'); return; }
   if (pw.length<4) { toast('Password must be at least 4 chars!','error'); return; }
-  const existing = await getUserByUsername(un);
-  if (existing) { toast('Username already taken! 😅','error'); return; }
   try {
-    await insertUser({
-      username: un, password: pw, avatar: selectedAvatar, points: 0,
-      status: 'pending', violations: [], joinedAt: new Date().toISOString()
+    const existing = await sbGet('employees', `username=eq.${encodeURIComponent(un)}`);
+    if (existing && existing.length > 0) { toast('Username already taken! 😅','error'); return; }
+    await sbPost('employees', {
+      username: un,
+      password: pw,
+      avatar: selectedAvatar,
+      points: 0,
+      status: 'pending',
+      violations: [],
+      joined_at: new Date().toISOString()
     });
-  } catch (e) {
+    saveSession({ username: un });
+    toast('Account created! Waiting for admin approval... ⏳','success');
+    confetti();
+    hide('emp-register');
+    refreshEmpView();
+  } catch(e) {
+    toast('Registration failed. Try again!','error');
     console.error(e);
-    toast('Could not create account — check Supabase setup 😵','error');
-    return;
   }
-  currentSession = un;
-  toast('Account created! Waiting for admin approval... ⏳','success');
-  confetti();
-  refreshEmpView();
 }
 
 function doLogout() {
-  currentSession = null;
-  refreshEmpView();
+  clearSession();
+  hide('emp-login'); hide('emp-register'); hide('emp-dashboard');
+  restoreEmpAuthDefault();
+  show('emp-auth');
   toast('See you! 👋','info');
 }
 
 async function doResetPass() {
+  const sess = loadSession();
+  if (!sess) return;
   const old = document.getElementById('oldPass').value;
   const nw = document.getElementById('newPass').value;
   const nw2 = document.getElementById('newPass2').value;
   if (!old||!nw||!nw2) { toast('Fill all fields!','error'); return; }
-  if (nw!==nw2) { toast('New passwords don\'t match!','error'); return; }
+  if (nw!==nw2) { toast("New passwords don't match!",'error'); return; }
   if (nw.length<4) { toast('New password too short!','error'); return; }
-  const user = await getUserByUsername(currentSession);
-  if (!user || user.password !== old) { toast('Old password is wrong! 🙈','error'); return; }
-  await updateUser(currentSession, { password: nw });
-  toast('Password updated! 🔒✅','success');
-  document.getElementById('oldPass').value='';
-  document.getElementById('newPass').value='';
-  document.getElementById('newPass2').value='';
+  try {
+    const users = await sbGet('employees', `username=eq.${encodeURIComponent(sess.username)}&password=eq.${encodeURIComponent(old)}`);
+    if (!users || users.length === 0) { toast('Old password is wrong! 🙈','error'); return; }
+    await sbPatch('employees', `username=eq.${encodeURIComponent(sess.username)}`, { password: nw });
+    toast('Password updated! 🔒✅','success');
+    document.getElementById('oldPass').value='';
+    document.getElementById('newPass').value='';
+    document.getElementById('newPass2').value='';
+  } catch(e) {
+    toast('Failed to update password.','error');
+    console.error(e);
+  }
 }
 
 function renderDashboard(user) {
-  hide('emp-login'); hide('emp-register');
+  hide('emp-auth'); hide('emp-login'); hide('emp-register');
   show('emp-dashboard');
 
   document.getElementById('empProfileCard').innerHTML = `
@@ -1019,17 +1032,14 @@ function renderDashboard(user) {
       <div class="profile-avatar">${user.avatar}</div>
       <div>
         <div class="profile-name">${user.username}</div>
-        <div class="profile-status">
-          <span class="badge badge-approved">✅ Approved Employee</span>
-        </div>
+        <div class="profile-status"><span class="badge badge-approved">✅ Approved Employee</span></div>
       </div>
-    </div>
-  `;
+    </div>`;
 
   const pts = user.points || 0;
   document.getElementById('empPointsDisplay').textContent = pts.toLocaleString();
   const pct = Math.min((pts/MAX_PTS)*100, 100);
-  setTimeout(()=>{ document.getElementById('empTrackFill').style.width = pct+'%'; }, 100);
+  setTimeout(() => { document.getElementById('empTrackFill').style.width = pct+'%'; }, 100);
 
   const ml = document.getElementById('empMilestones');
   ml.innerHTML = '';
@@ -1045,15 +1055,12 @@ function renderDashboard(user) {
   const nextTrip = MILESTONES.find(m=>pts<m.pts);
   const banner = document.getElementById('empNextTripBanner');
   if (nextTrip) {
-    const need = nextTrip.pts - pts;
     banner.style.display='block';
-    banner.innerHTML = `<div class="card">
-      <div class="trip-banner">
-        <div class="t-icon">${nextTrip.icon}</div>
-        <h3>Next Goal: ${nextTrip.label}!</h3>
-        <p>Only <strong>${need.toLocaleString()} more points</strong> to go! Keep it up! 🔥</p>
-      </div>
-    </div>`;
+    banner.innerHTML = `<div class="card"><div class="trip-banner">
+      <div class="t-icon">${nextTrip.icon}</div>
+      <h3>Next Goal: ${nextTrip.label}!</h3>
+      <p>Only <strong>${(nextTrip.pts - pts).toLocaleString()} more points</strong> to go! Keep it up! 🔥</p>
+    </div></div>`;
   } else {
     banner.style.display='block';
     banner.innerHTML = `<div class="card"><div class="trip-banner">
@@ -1064,10 +1071,11 @@ function renderDashboard(user) {
   }
 
   const vl = document.getElementById('empViolationsList');
-  if (!user.violations || user.violations.length===0) {
+  const violations = user.violations || [];
+  if (violations.length === 0) {
     vl.innerHTML = '<p style="color:var(--green);">No violations! Keep it clean! 😇🌟</p>';
   } else {
-    vl.innerHTML = user.violations.slice().reverse().map(v=>`
+    vl.innerHTML = violations.slice().reverse().map(v=>`
       <div class="violation-item">
         <div>
           <div class="v-reason">${v.reason}</div>
@@ -1080,7 +1088,8 @@ function renderDashboard(user) {
 
 // ===== ADMIN =====
 function refreshAdminView() {
-  if (!isAdminSession) {
+  const isAdmin = loadAdminSession();
+  if (!isAdmin) {
     hide('admin-dashboard'); show('admin-lock');
   } else {
     hide('admin-lock'); show('admin-dashboard');
@@ -1091,7 +1100,7 @@ function refreshAdminView() {
 function doAdminLogin() {
   const pw = document.getElementById('adminPassInput').value;
   if (pw === 'Vairmontque') {
-    isAdminSession = true;
+    saveAdminSession(true);
     toast('Admin access granted! 🔓👑','success');
     confetti();
     refreshAdminView();
@@ -1101,91 +1110,144 @@ function doAdminLogin() {
 }
 
 function doAdminLogout() {
-  isAdminSession = false;
+  saveAdminSession(false);
   document.getElementById('adminPassInput').value='';
   toast('Admin logged out.','info');
   hide('admin-dashboard'); show('admin-lock');
 }
 
 async function renderAdminDashboard() {
-  const users = await loadUsers();
-  const pending = users.filter(u=>u.status==='pending');
-  const approved = users.filter(u=>u.status==='approved');
+  try {
+    const users = await sbGet('employees', 'order=joined_at.asc');
+    const pending = users.filter(u=>u.status==='pending');
+    const approved = users.filter(u=>u.status==='approved');
 
-  const pl = document.getElementById('pendingList');
-  pl.innerHTML = pending.length===0 ? '<p style="color:var(--green);">No pending accounts! All clear! 🎉</p>'
-    : pending.map(u=>`
-      <div class="pending-item">
-        <div class="pending-info">
-          <div class="pending-avatar">${u.avatar}</div>
-          <div>
-            <div class="pending-name">${u.username}</div>
-            <span class="badge badge-pending">Pending</span>
+    // Pending
+    const pl = document.getElementById('pendingList');
+    pl.innerHTML = pending.length===0
+      ? '<p style="color:var(--green);">No pending accounts! All clear! 🎉</p>'
+      : pending.map(u=>`
+          <div class="pending-item">
+            <div class="pending-info">
+              <div class="pending-avatar">${u.avatar}</div>
+              <div>
+                <div class="pending-name">${u.username}</div>
+                <span class="badge badge-pending">Pending</span>
+              </div>
+            </div>
+            <div class="pending-actions">
+              <button class="btn btn-green btn-sm" onclick="approveUser('${u.username}')">✅ Approve</button>
+              <button class="btn btn-orange btn-sm" onclick="rejectUser('${u.username}')">❌ Reject</button>
+            </div>
+          </div>`).join('');
+
+    // Employees
+    const el = document.getElementById('employeeList');
+    el.innerHTML = approved.length===0
+      ? '<p style="color:var(--muted);">No approved employees yet.</p>'
+      : approved.map(u=>`
+          <div class="employee-row">
+            <div class="er-avatar">${u.avatar}</div>
+            <div class="er-info">
+              <div class="er-name">${u.username}</div>
+              <div style="font-size:.8rem;color:var(--muted);">${(u.violations||[]).length} violation(s)</div>
+            </div>
+            <div class="er-pts">${(u.points||0).toLocaleString()} pts</div>
+            <div class="er-actions">
+              <button class="btn btn-red btn-sm" onclick="deleteEmployee('${u.username}')">🗑️ Delete</button>
+            </div>
+          </div>`).join('');
+
+    // Monthly credits
+    const now = new Date();
+    const monthKey = `${now.getFullYear()}-${now.getMonth()}`;
+    const creditLogRaw = localStorage.getItem('pp_credits');
+    const creditLog = creditLogRaw ? JSON.parse(creditLogRaw) : {};
+    const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const ml = document.getElementById('monthlyPointsList');
+    if (approved.length === 0) {
+      ml.innerHTML = '<p style="color:var(--muted);">No approved employees yet.</p>';
+    } else {
+      ml.innerHTML = approved.map(u => {
+        const alreadyCredited = creditLog[u.username] === monthKey;
+        return `<div class="monthly-row">
+          <div style="font-size:1.6rem;">${u.avatar}</div>
+          <div class="mr-info">
+            <div class="mr-name">${u.username}</div>
+            <div class="mr-sub">${alreadyCredited
+              ? `✅ Already credited for ${monthNames[now.getMonth()]} ${now.getFullYear()}`
+              : `⏳ Not yet credited for ${monthNames[now.getMonth()]} ${now.getFullYear()}`
+            }</div>
           </div>
-        </div>
-        <div class="pending-actions">
-          <button class="btn btn-green btn-sm" onclick="approveUser('${u.username}')">✅ Approve</button>
-          <button class="btn btn-orange btn-sm" onclick="rejectUser('${u.username}')">❌ Reject</button>
-        </div>
-      </div>`).join('');
+          <div class="mr-pts">${(u.points||0).toLocaleString()} pts</div>
+          <button class="btn btn-sm ${alreadyCredited ? 'btn-orange' : 'btn-green'}"
+            onclick="creditMonthlyPoints('${u.username}')"
+            ${alreadyCredited ? 'style="opacity:.5;cursor:not-allowed;"' : ''}>
+            ${alreadyCredited ? '✅ Done' : '💰 Credit +500'}
+          </button>
+        </div>`;
+      }).join('');
+    }
 
-  const el = document.getElementById('employeeList');
-  el.innerHTML = approved.length===0 ? '<p style="color:var(--muted);">No approved employees yet.</p>'
-    : approved.map(u=>`
-      <div class="employee-row">
-        <div class="er-avatar">${u.avatar}</div>
-        <div class="er-info">
-          <div class="er-name">${u.username}</div>
-          <div style="font-size:.8rem;color:var(--muted);">${(u.violations||[]).length} violation(s)</div>
-        </div>
-        <div class="er-pts">${(u.points||0).toLocaleString()} pts</div>
-      </div>`).join('');
+    // Violation target dropdown
+    const vt = document.getElementById('violationTarget');
+    vt.innerHTML = '<option value="">-- Select Employee --</option>' +
+      approved.map(u=>`<option value="${u.username}">${u.avatar} ${u.username} (${(u.points||0).toLocaleString()} pts)</option>`).join('');
 
-  const now = new Date();
-  const monthKey = `${now.getFullYear()}-${now.getMonth()}`;
-  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const ml = document.getElementById('monthlyPointsList');
-  if (approved.length === 0) {
-    ml.innerHTML = '<p style="color:var(--muted);">No approved employees yet.</p>';
-  } else {
-    const rows = await Promise.all(approved.map(async u => {
-      const alreadyCredited = await isCreditedThisMonth(u.username, monthKey);
-      return `<div class="monthly-row">
-        <div style="font-size:1.6rem;">${u.avatar}</div>
-        <div class="mr-info">
-          <div class="mr-name">${u.username}</div>
-          <div class="mr-sub">${alreadyCredited
-            ? `✅ Already credited for ${monthNames[now.getMonth()]} ${now.getFullYear()}`
-            : `⏳ Not yet credited for ${monthNames[now.getMonth()]} ${now.getFullYear()}`
-          }</div>
-        </div>
-        <div class="mr-pts">${(u.points||0).toLocaleString()} pts</div>
-        <button class="btn btn-sm ${alreadyCredited ? 'btn-orange' : 'btn-green'}"
-          onclick="creditMonthlyPoints('${u.username}')"
-          ${alreadyCredited ? 'style="opacity:.5;cursor:not-allowed;"' : ''}>
-          ${alreadyCredited ? '✅ Done' : '💰 Credit +500'}
-        </button>
-      </div>`;
-    }));
-    ml.innerHTML = rows.join('');
+  } catch(e) {
+    toast('Failed to load data. Check connection.','error');
+    console.error(e);
   }
-  const vt = document.getElementById('violationTarget');
-  vt.innerHTML = '<option value="">-- Select Employee --</option>' +
-    approved.map(u=>`<option value="${u.username}">${u.avatar} ${u.username} (${(u.points||0).toLocaleString()} pts)</option>`).join('');
 }
 
 async function approveUser(un) {
-  await updateUser(un, { status: 'approved', points: 0 });
-  toast(un+' approved! 🎉 They can now earn points!','success');
-  confetti();
-  renderAdminDashboard();
+  try {
+    await sbPatch('employees', `username=eq.${encodeURIComponent(un)}`, { status: 'approved' });
+    toast(un+' approved! 🎉 They can now earn points!','success');
+    confetti();
+    renderAdminDashboard();
+  } catch(e) {
+    toast('Failed to approve user.','error');
+    console.error(e);
+  }
 }
 
-async function rejectUser(un) {
-  if (!confirm('Delete account for '+un+'? This cannot be undone.')) return;
-  await deleteUserRow(un);
-  toast(un+' rejected and removed.','info');
-  renderAdminDashboard();
+function rejectUser(un) {
+  showConfirm('❌', 'Reject Account?', `This will permanently delete ${un}'s pending account. This cannot be undone.`, '❌ Reject & Delete', async () => {
+    try {
+      await sbDelete('employees', `username=eq.${encodeURIComponent(un)}`);
+      toast(un+' rejected and removed.','info');
+      renderAdminDashboard();
+    } catch(e) {
+      toast('Failed to reject user.','error');
+      console.error(e);
+    }
+  });
+}
+
+function deleteEmployee(un) {
+  showConfirm('🗑️', 'Delete Employee?', `Are you sure you want to permanently delete ${un}'s account and all their data? This cannot be undone!`, '🗑️ Yes, Delete', async () => {
+    try {
+      await sbDelete('employees', `username=eq.${encodeURIComponent(un)}`);
+      // Also clean up credit log
+      const creditLogRaw = localStorage.getItem('pp_credits');
+      if (creditLogRaw) {
+        const creditLog = JSON.parse(creditLogRaw);
+        delete creditLog[un];
+        localStorage.setItem('pp_credits', JSON.stringify(creditLog));
+      }
+      // If this was the logged-in user, log them out
+      const sess = loadSession();
+      if (sess && sess.username === un) {
+        clearSession();
+      }
+      toast(`🗑️ ${un}'s account has been deleted.`, 'info');
+      renderAdminDashboard();
+    } catch(e) {
+      toast('Failed to delete employee.','error');
+      console.error(e);
+    }
+  });
 }
 
 function handleViolationTypeChange() {
@@ -1197,7 +1259,6 @@ async function issueViolation() {
   const target = document.getElementById('violationTarget').value;
   const typeVal = document.getElementById('violationType').value;
   const reason = document.getElementById('violationReason').value.trim();
-
   if (!target) { toast('Select an employee!','error'); return; }
   if (!reason) { toast('Provide a reason!','error'); return; }
 
@@ -1209,34 +1270,52 @@ async function issueViolation() {
     pts = parseInt(typeVal);
   }
 
-  const user = await getUserByUsername(target);
-  if (!user) { toast('Employee not found!','error'); return; }
-  const newPts = Math.max(0, (user.points||0) - pts);
-  const violations = user.violations || [];
-  violations.push({ pts, reason, date: new Date().toISOString() });
-  await updateUser(target, { points: newPts, violations });
-  toast('⚡ Violation issued to '+target+'! −'+pts+' pts','success');
-  document.getElementById('violationReason').value='';
-  document.getElementById('customPts').value='';
-  renderAdminDashboard();
+  try {
+    const users = await sbGet('employees', `username=eq.${encodeURIComponent(target)}`);
+    if (!users || users.length===0) { toast('Employee not found!','error'); return; }
+    const user = users[0];
+    const newPoints = Math.max(0, (user.points||0) - pts);
+    const violations = user.violations || [];
+    violations.push({ pts, reason, date: new Date().toISOString() });
+    await sbPatch('employees', `username=eq.${encodeURIComponent(target)}`, { points: newPoints, violations });
+    toast('⚡ Violation issued to '+target+'! −'+pts+' pts','success');
+    document.getElementById('violationReason').value='';
+    document.getElementById('customPts').value='';
+    renderAdminDashboard();
+    // Refresh employee view if it's the logged-in user
+    const sess = loadSession();
+    if (sess && sess.username === target) refreshEmpView();
+  } catch(e) {
+    toast('Failed to issue violation.','error');
+    console.error(e);
+  }
 }
 
 async function creditMonthlyPoints(username) {
   const now = new Date();
   const monthKey = `${now.getFullYear()}-${now.getMonth()}`;
-  const already = await isCreditedThisMonth(username, monthKey);
-  if (already) {
+  const creditLogRaw = localStorage.getItem('pp_credits');
+  const creditLog = creditLogRaw ? JSON.parse(creditLogRaw) : {};
+  if (creditLog[username] === monthKey) {
     toast(`${username} already got their points this month! 🙅`, 'error');
     return;
   }
-  const user = await getUserByUsername(username);
-  if (!user) { toast('Employee not found!', 'error'); return; }
-  await updateUser(username, { points: (user.points || 0) + 500 });
-  await markCredited(username, monthKey);
-  toast(`💰 +500 pts credited to ${username}!`, 'success');
-  confetti();
-  renderAdminDashboard();
-  if (currentSession === username) refreshEmpView();
+  try {
+    const users = await sbGet('employees', `username=eq.${encodeURIComponent(username)}`);
+    if (!users || users.length===0) { toast('Employee not found!','error'); return; }
+    const user = users[0];
+    await sbPatch('employees', `username=eq.${encodeURIComponent(username)}`, { points: (user.points||0) + 500 });
+    creditLog[username] = monthKey;
+    localStorage.setItem('pp_credits', JSON.stringify(creditLog));
+    toast(`💰 +500 pts credited to ${username}!`, 'success');
+    confetti();
+    renderAdminDashboard();
+    const sess = loadSession();
+    if (sess && sess.username === username) refreshEmpView();
+  } catch(e) {
+    toast('Failed to credit points.','error');
+    console.error(e);
+  }
 }
 
 // Init
