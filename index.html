@@ -153,9 +153,10 @@
     border-color: var(--purple);
     box-shadow: 0 0 0 3px rgba(168,85,247,.2);
   }
-  input::placeholder { color: var(--muted); }
+  input::placeholder, textarea::placeholder { color: var(--muted); }
   select option { background: #1A1035; }
   label { font-weight: 700; font-size: .9rem; display: block; }
+  textarea { resize: vertical; min-height: 70px; font-family: 'Nunito', sans-serif; }
 
   .btn {
     font-family: 'Fredoka One', cursive;
@@ -399,6 +400,11 @@
   .badge-pending { background: rgba(252,211,77,.2); color: var(--yellow); }
   .badge-approved { background: rgba(34,197,94,.2); color: var(--green); }
   .badge-suspended { background: rgba(239,68,68,.2); color: var(--red); }
+  .badge-rank {
+    background: linear-gradient(135deg, rgba(168,85,247,.3), rgba(255,107,157,.3));
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,.15);
+  }
 
   .monthly-row {
     background: rgba(255,255,255,.04);
@@ -468,6 +474,71 @@
   .confirm-box p { color: var(--muted); font-size: .9rem; margin-bottom: 1.25rem; }
   .confirm-actions { display: flex; gap: .75rem; justify-content: center; }
 
+  /* Intro splash */
+  #introOverlay {
+    position: fixed; inset: 0;
+    z-index: 100000;
+    background: radial-gradient(circle at 50% 30%, #2A1550 0%, #0F0A1E 70%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+    transition: opacity .5s ease, visibility .5s ease;
+  }
+  #introOverlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .intro-emoji {
+    font-size: 4.5rem;
+    margin-bottom: .5rem;
+    animation: introBounce 1.6s ease-in-out infinite;
+  }
+  @keyframes introBounce {
+    0%,100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-16px) rotate(4deg); }
+  }
+  .intro-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    background: linear-gradient(90deg, #FF6B9D, #A855F7, #3B82F6, #06B6D4, #22C55E, #FCD34D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: rainbow 4s linear infinite;
+    background-size: 300%;
+    margin-bottom: .5rem;
+  }
+  .intro-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 420px;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+  .intro-dontshow {
+    margin-top: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    color: var(--muted);
+    font-size: .85rem;
+    cursor: pointer;
+  }
+  .intro-dontshow input { width: auto; margin: 0; }
+
+  /* Directory */
+  .directory-card {
+    background: rgba(255,255,255,.04);
+    border-radius: 14px;
+    padding: .9rem 1.1rem;
+    margin-bottom: .6rem;
+    display: flex; gap: .9rem; align-items: flex-start;
+  }
+  .directory-avatar { font-size: 2rem; }
+  .directory-info { flex: 1; min-width: 0; }
+  .directory-name-row { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: .25rem; }
+  .directory-name { font-weight: 800; font-size: 1rem; }
+  .directory-bio { font-size: .85rem; color: #C4B5D8; line-height: 1.5; }
+  .directory-bio.empty { color: var(--muted); font-style: italic; }
+
   @media (max-width: 600px) {
     .profile-header { flex-direction: column; text-align: center; }
     .points-big { font-size: 2.5rem; }
@@ -477,6 +548,17 @@
 <body>
 
 <div class="emoji-bg" id="emojiBg"></div>
+
+<!-- ========== INTRO SPLASH ========== -->
+<div id="introOverlay">
+  <div class="intro-emoji">🎉</div>
+  <div class="intro-title">Welcome to PointsParty HQ!</div>
+  <p class="intro-sub">Work hard, stay awesome, and earn points every month toward epic team trips — from Bandung all the way to Umroh! ✈️🌍 Let's get started.</p>
+  <button class="btn btn-pink" onclick="closeIntro()">🚀 Enter PointsParty</button>
+  <label class="intro-dontshow">
+    <input type="checkbox" id="introDontShow"> Don't show this again on this device
+  </label>
+</div>
 
 <header>
   <h1>🎉 PointsParty HQ 🎉</h1>
@@ -536,6 +618,27 @@
       <div class="milestone"><div class="m-icon">🐘</div><div class="m-pts">10,000</div><div class="m-label">Thailand Trip</div></div>
       <div class="milestone"><div class="m-icon">🕌</div><div class="m-pts">15,000</div><div class="m-label">Turkey Trip</div></div>
       <div class="milestone"><div class="m-icon">🌙</div><div class="m-pts">25,000</div><div class="m-label">Umroh Trip</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎖️ Employee Ranks</h2>
+    <p style="margin-bottom:.75rem;">Ranks are earned automatically based on how long you've been part of the team!</p>
+    <div class="violation-type-card vt-mini">
+      <div class="vt-icon">🌱</div>
+      <div class="vt-info"><h4>Newbie</h4><p>0+ days since joining</p></div>
+    </div>
+    <div class="violation-type-card vt-medium">
+      <div class="vt-icon">🔧</div>
+      <div class="vt-info"><h4>Junior</h4><p>100+ days since joining</p></div>
+    </div>
+    <div class="violation-type-card vt-custom">
+      <div class="vt-icon">⭐</div>
+      <div class="vt-info"><h4>Senior</h4><p>365+ days since joining</p></div>
+    </div>
+    <div class="violation-type-card vt-grande">
+      <div class="vt-icon">👑</div>
+      <div class="vt-info"><h4>Chief</h4><p>730+ days since joining</p></div>
     </div>
   </div>
 
@@ -653,6 +756,19 @@
       </div>
     </div>
     <div id="empNextTripBanner" style="display:none;"></div>
+    <div class="card">
+      <h2>📝 Your Bio</h2>
+      <p style="color:var(--muted);font-size:.85rem;margin-bottom:.75rem;">Tell your coworkers a bit about yourself! Max 25 words — visible in the Employee Directory.</p>
+      <textarea id="bioInput" placeholder="e.g. Coffee enthusiast, weekend hiker, and spreadsheet wizard 📊" maxlength="400" oninput="updateBioCounter()"></textarea>
+      <div id="bioCounter" style="font-size:.8rem;color:var(--muted);margin-top:-.6rem;margin-bottom:.85rem;">0 / 25 words</div>
+      <button class="btn btn-yellow btn-sm" onclick="doSaveBio()">💾 Save Bio</button>
+    </div>
+    <div class="card">
+      <h2>🔍 Employee Directory</h2>
+      <p style="color:var(--muted);font-size:.85rem;margin-bottom:.75rem;">Search your coworkers by name — see their avatar, rank, and bio (points are kept private).</p>
+      <input type="text" id="directorySearch" placeholder="Search employees by name..." oninput="renderDirectory()">
+      <div id="directoryList"></div>
+    </div>
     <div class="card">
       <h2>🔄 Reset Password</h2>
       <label>Old Password</label>
@@ -809,6 +925,33 @@ const MILESTONES = [
 ];
 const MAX_PTS = 25000;
 const AVATARS = ['😄','😎','🤩','🥳','🦸','🧙','🐯','🦊','🐸','🐼','🦋','🌟','🎩','👑','🎮','🚀','🍕','🌈'];
+
+const RANKS = [
+  { days: 730, label: 'Chief',  icon: '👑' },
+  { days: 365, label: 'Senior', icon: '⭐' },
+  { days: 100, label: 'Junior', icon: '🔧' },
+  { days: 0,   label: 'Newbie', icon: '🌱' },
+];
+function getRank(joinedAtStr) {
+  if (!joinedAtStr) return RANKS[RANKS.length - 1];
+  const joined = new Date(joinedAtStr);
+  const days = Math.floor((Date.now() - joined.getTime()) / (1000*60*60*24));
+  for (const r of RANKS) { if (days >= r.days) return r; }
+  return RANKS[RANKS.length - 1];
+}
+
+// ===== INTRO SPLASH =====
+function closeIntro() {
+  if (document.getElementById('introDontShow').checked) {
+    localStorage.setItem('pp_intro_seen', 'true');
+  }
+  document.getElementById('introOverlay').classList.add('hidden');
+}
+(function initIntro() {
+  if (localStorage.getItem('pp_intro_seen') === 'true') {
+    document.getElementById('introOverlay').classList.add('hidden');
+  }
+})();
 
 // ===== FLOATING EMOJIS =====
 const EMOJIS = ['⭐','🎉','🌟','🏆','✈️','🎊','💎','🌈','🎈','🚀','💫','🌴','🏖️','🕌','🎁'];
@@ -979,6 +1122,7 @@ async function doRegister() {
       points: 0,
       status: 'pending',
       violations: [],
+      bio: '',
       joined_at: new Date().toISOString()
     });
     saveSession({ username: un });
@@ -1023,16 +1167,91 @@ async function doResetPass() {
   }
 }
 
+function countWords(str) {
+  const trimmed = (str||'').trim();
+  if (!trimmed) return 0;
+  return trimmed.split(/\s+/).length;
+}
+
+function updateBioCounter() {
+  const val = document.getElementById('bioInput').value;
+  const n = countWords(val);
+  const counter = document.getElementById('bioCounter');
+  counter.textContent = n + ' / 25 words';
+  counter.style.color = n > 25 ? 'var(--red)' : 'var(--muted)';
+}
+
+async function doSaveBio() {
+  const sess = loadSession();
+  if (!sess) return;
+  const bio = document.getElementById('bioInput').value.trim();
+  const wc = countWords(bio);
+  if (wc > 25) { toast('Bio must be 25 words or fewer! ✂️','error'); return; }
+  try {
+    await sbPatch('employees', `username=eq.${encodeURIComponent(sess.username)}`, { bio });
+    toast('Bio saved! ✅','success');
+  } catch(e) {
+    toast('Failed to save bio.','error');
+    console.error(e);
+  }
+}
+
+// ===== EMPLOYEE DIRECTORY =====
+let directoryCache = [];
+let currentUsername = null;
+
+async function loadDirectory() {
+  try {
+    const users = await sbGet('employees', 'status=eq.approved&order=username.asc');
+    directoryCache = users || [];
+    renderDirectory();
+  } catch(e) {
+    document.getElementById('directoryList').innerHTML = '<p style="color:var(--red);">Failed to load directory.</p>';
+    console.error(e);
+  }
+}
+
+function renderDirectory() {
+  const q = (document.getElementById('directorySearch')?.value || '').trim().toLowerCase();
+  const list = document.getElementById('directoryList');
+  if (!list) return;
+  const filtered = directoryCache.filter(u => u.username.toLowerCase().includes(q));
+  if (filtered.length === 0) {
+    list.innerHTML = '<p style="color:var(--muted);margin-top:.5rem;">No employees found. 🔍</p>';
+    return;
+  }
+  list.innerHTML = filtered.map(u => {
+    const rank = getRank(u.joined_at);
+    const bio = (u.bio || '').trim();
+    return `<div class="directory-card">
+      <div class="directory-avatar">${u.avatar}</div>
+      <div class="directory-info">
+        <div class="directory-name-row">
+          <span class="directory-name">${u.username}${u.username===currentUsername?' (you)':''}</span>
+          <span class="badge badge-rank">${rank.icon} ${rank.label}</span>
+        </div>
+        <div class="directory-bio ${bio?'':'empty'}">${bio || 'No bio yet.'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
 function renderDashboard(user) {
   hide('emp-auth'); hide('emp-login'); hide('emp-register');
   show('emp-dashboard');
+
+  currentUsername = user.username;
+  const rank = getRank(user.joined_at);
 
   document.getElementById('empProfileCard').innerHTML = `
     <div class="profile-header">
       <div class="profile-avatar">${user.avatar}</div>
       <div>
         <div class="profile-name">${user.username}</div>
-        <div class="profile-status"><span class="badge badge-approved">✅ Approved Employee</span></div>
+        <div class="profile-status">
+          <span class="badge badge-approved">✅ Approved Employee</span>
+          <span class="badge badge-rank">${rank.icon} ${rank.label}</span>
+        </div>
       </div>
     </div>`;
 
@@ -1069,6 +1288,11 @@ function renderDashboard(user) {
       <p>You are the ultimate PointsParty champion!</p>
     </div></div>`;
   }
+
+  document.getElementById('bioInput').value = user.bio || '';
+  updateBioCounter();
+
+  loadDirectory();
 
   const vl = document.getElementById('empViolationsList');
   const violations = user.violations || [];
@@ -1145,18 +1369,19 @@ async function renderAdminDashboard() {
     const el = document.getElementById('employeeList');
     el.innerHTML = approved.length===0
       ? '<p style="color:var(--muted);">No approved employees yet.</p>'
-      : approved.map(u=>`
-          <div class="employee-row">
+      : approved.map(u=>{
+          const rank = getRank(u.joined_at);
+          return `<div class="employee-row">
             <div class="er-avatar">${u.avatar}</div>
             <div class="er-info">
-              <div class="er-name">${u.username}</div>
+              <div class="er-name">${u.username} <span class="badge badge-rank" style="font-size:.65rem;">${rank.icon} ${rank.label}</span></div>
               <div style="font-size:.8rem;color:var(--muted);">${(u.violations||[]).length} violation(s)</div>
             </div>
             <div class="er-pts">${(u.points||0).toLocaleString()} pts</div>
             <div class="er-actions">
               <button class="btn btn-red btn-sm" onclick="deleteEmployee('${u.username}')">🗑️ Delete</button>
             </div>
-          </div>`).join('');
+          </div>`;}).join('');
 
     // Monthly credits
     const now = new Date();
