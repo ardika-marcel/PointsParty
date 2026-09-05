@@ -1130,7 +1130,7 @@ async function doRegister() {
     hide('emp-register');
     refreshEmpView();
   } catch(e) {
-    toast('Registration failed. Try again!','error');
+    toast('Registration failed: ' + String(e.message||e).slice(0,150), 'error');
     console.error(e);
   }
 }
