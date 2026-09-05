@@ -1122,7 +1122,6 @@ async function doRegister() {
       points: 0,
       status: 'pending',
       violations: [],
-      bio: '',
       joined_at: new Date().toISOString()
     });
     saveSession({ username: un });
@@ -1191,7 +1190,11 @@ async function doSaveBio() {
     await sbPatch('employees', `username=eq.${encodeURIComponent(sess.username)}`, { bio });
     toast('Bio saved! ✅','success');
   } catch(e) {
-    toast('Failed to save bio.','error');
+    if (String(e.message||e).toLowerCase().includes('column')) {
+      toast("Bio can't be saved yet — ask your admin to add a 'bio' column to the employees table in Supabase. 🛠️", 'error');
+    } else {
+      toast('Failed to save bio.','error');
+    }
     console.error(e);
   }
 }
