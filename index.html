@@ -96,6 +96,7 @@
   .tab-btn.t0 { background: linear-gradient(135deg, var(--cyan), var(--blue)); color: white; }
   .tab-btn.t1 { background: linear-gradient(135deg, var(--pink), var(--purple)); color: white; }
   .tab-btn.t2 { background: linear-gradient(135deg, var(--orange), var(--red)); color: white; }
+  .tab-btn.t3 { background: linear-gradient(135deg, var(--purple), var(--yellow)); color: white; }
   .tab-btn.active { transform: scale(1.1); box-shadow: 0 0 25px rgba(255,255,255,.3); }
 
   .panel {
@@ -603,7 +604,7 @@
 <div id="introOverlay">
   <div class="intro-emoji">🎉</div>
   <div class="intro-title">Welcome to PointsParty HQ!</div>
-  <p class="intro-sub">Work hard, stay awesome, and earn points every month toward epic trips — from Bandung all the way to Umroh! ✈️🌍 Let's get started.</p>
+  <p class="intro-sub">Work hard, stay awesome, and earn points every month toward epic team trips — from Bandung all the way to Umroh! ✈️🌍 Let's get started.</p>
   <button class="btn btn-pink" onclick="closeIntro()">🚀 Enter PointsParty</button>
   <label class="intro-dontshow">
     <input type="checkbox" id="introDontShow"> Don't show this again on this device
@@ -619,6 +620,7 @@
   <button class="tab-btn t0 active" onclick="switchTab(0)">📖 Info & Guide</button>
   <button class="tab-btn t1" onclick="switchTab(1)">👤 Employee Zone</button>
   <button class="tab-btn t2" onclick="switchTab(2)">🔐 Admin Panel</button>
+  <button class="tab-btn t3" onclick="switchTab(3)">🎮 Activities</button>
 </div>
 
 <!-- ========== PANEL 0: INFO ========== -->
@@ -823,9 +825,9 @@
       </div>
     </div>
     <div id="empNextTripBanner" style="display:none;"></div>
-    <div class="card" id="activitiesCard">
-      <h2>🎮 Activities</h2>
-      <div id="activitiesBody"></div>
+    <div class="card" style="text-align:center;">
+      <p style="margin-bottom:.75rem;">🎮 Want to earn bonus points? Head over to the <strong>Activities</strong> tab to spin the wheel, pick a card, or claim your birthday gift!</p>
+      <button class="btn btn-pink btn-sm" onclick="switchTab(3)">🎮 Go to Activities</button>
     </div>
     <div class="card">
       <h2>📝 Your Bio</h2>
@@ -911,6 +913,32 @@
 
     <div style="text-align:center;margin-top:.5rem;">
       <button class="btn btn-orange btn-sm" onclick="doAdminLogout()">👋 Admin Logout</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PANEL 3: ACTIVITIES ========== -->
+<div class="panel" id="panel3">
+  <div id="act-auth">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:4rem;margin-bottom:.5rem;">🎮</div>
+      <h2>Activities</h2>
+      <p style="color:var(--muted);margin-bottom:1.25rem;">Log in from the Employee Zone to spin the wheel, pick a card, and claim your birthday gift!</p>
+      <button class="btn btn-pink" onclick="switchTab(1)">👤 Go to Employee Zone</button>
+    </div>
+  </div>
+  <div id="act-pending" style="display:none;">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:3rem;margin-bottom:.5rem;">⏳</div>
+      <h2>Hang tight!</h2>
+      <p style="color:var(--muted);">Your account is still <strong>pending admin approval</strong>. Activities unlock once you're approved! 🙏</p>
+    </div>
+  </div>
+  <div id="act-dashboard" style="display:none;">
+    <div class="card" id="actProfileCard"></div>
+    <div class="card">
+      <h2>🎮 Activities</h2>
+      <div id="activitiesBody"></div>
     </div>
   </div>
 </div>
@@ -1089,6 +1117,7 @@ function switchTab(n) {
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===n));
   if (n===1) refreshEmpView();
   if (n===2) refreshAdminView();
+  if (n===3) refreshActivitiesView();
 }
 
 // ===== AVATAR GRID =====
@@ -1280,6 +1309,45 @@ async function doSaveBio() {
   }
 }
 
+async function refreshActivitiesView() {
+  const sess = loadSession();
+  if (!sess) {
+    hide('act-pending'); hide('act-dashboard');
+    show('act-auth');
+    return;
+  }
+  try {
+    const users = await sbGet('employees', `username=eq.${encodeURIComponent(sess.username)}`);
+    if (!users || users.length === 0) { clearSession(); refreshActivitiesView(); return; }
+    const user = users[0];
+    if (user.status === 'pending') {
+      hide('act-auth'); hide('act-dashboard');
+      show('act-pending');
+      return;
+    }
+    hide('act-auth'); hide('act-pending');
+    show('act-dashboard');
+    const rank = getRank(user.joined_at);
+    const daysReg = getDaysRegistered(user.joined_at);
+    document.getElementById('actProfileCard').innerHTML = `
+      <div class="profile-header">
+        <div class="profile-avatar">${user.avatar}</div>
+        <div>
+          <div class="profile-name">${user.username}</div>
+          <div class="profile-status">
+            <span class="badge badge-approved">✅ Approved Employee</span>
+            <span class="badge badge-rank">${rank.icon} ${rank.label}</span>
+          </div>
+          <div class="profile-status" style="margin-top:.4rem;">🎯 <strong>${(user.points||0).toLocaleString()}</strong> points</div>
+        </div>
+      </div>`;
+    renderActivities(user, daysReg);
+  } catch(e) {
+    toast('Connection error. Check your network. 😬', 'error');
+    console.error(e);
+  }
+}
+
 // ===== EMPLOYEE DIRECTORY =====
 let directoryCache = [];
 let currentUsername = null;
@@ -1410,12 +1478,12 @@ async function doSpinWheel() {
       const users = await sbGet('employees', `username=eq.${encodeURIComponent(sess.username)}`);
       if (!users || users.length===0) return;
       const user = users[0];
-      if (user.last_spin_date === todayStr()) { toast('Already spun today!','error'); refreshEmpView(); return; }
+      if (user.last_spin_date === todayStr()) { toast('Already spun today!','error'); refreshActivitiesView(); return; }
       const newPoints = (user.points||0) + outcome.pts;
       await sbPatch('employees', `username=eq.${encodeURIComponent(sess.username)}`, { points: newPoints, last_spin_date: todayStr() });
       toast(`🎡 ${outcome.label}`, outcome.pts>=15?'success':'info');
       if (outcome.pts >= 15) confetti();
-      refreshEmpView();
+      refreshActivitiesView();
     } catch(e) {
       dbErrorToast(e, "Spin couldn't save — ask your admin to add the 'last_spin_date' column.");
       if (btn) btn.disabled = false;
@@ -1470,13 +1538,13 @@ async function doPickCard(idx) {
     const users = await sbGet('employees', `username=eq.${encodeURIComponent(sess.username)}`);
     if (!users || users.length===0) return;
     const user = users[0];
-    if (user.last_card_date === todayStr()) { toast('Already picked a card today!','error'); cardDeck = null; setTimeout(refreshEmpView, 600); return; }
+    if (user.last_card_date === todayStr()) { toast('Already picked a card today!','error'); cardDeck = null; setTimeout(refreshActivitiesView, 600); return; }
     const newPoints = (user.points||0) + pts;
     await sbPatch('employees', `username=eq.${encodeURIComponent(sess.username)}`, { points: newPoints, last_card_date: todayStr() });
     toast(pts>0 ? `🃏 You won ${pts} points!` : '🃏 Empty card — better luck next week!', pts>0?'success':'info');
     if (pts>0) confetti();
     cardDeck = null;
-    setTimeout(refreshEmpView, 900);
+    setTimeout(refreshActivitiesView, 900);
   } catch(e) {
     dbErrorToast(e, "Card pick couldn't save — ask your admin to add the 'last_card_date' column.");
     cardDeck = null;
@@ -1537,11 +1605,11 @@ async function doSetBirthday() {
   showConfirm('🎂', 'Lock in this birthday?', `You won't be able to change it later. Are you sure ${formatBirthdayDisplay(val)} is correct?`, '🎂 Yes, Save It', async () => {
     try {
       const users = await sbGet('employees', `username=eq.${encodeURIComponent(sess.username)}`);
-      if (users && users[0] && users[0].birthday) { toast('Birthday already set — it cannot be changed!','error'); refreshEmpView(); return; }
+      if (users && users[0] && users[0].birthday) { toast('Birthday already set — it cannot be changed!','error'); refreshActivitiesView(); return; }
       await sbPatch('employees', `username=eq.${encodeURIComponent(sess.username)}`, { birthday: val });
       toast('🎂 Birthday saved!','success');
       confetti();
-      refreshEmpView();
+      refreshActivitiesView();
     } catch(e) {
       dbErrorToast(e, "Birthday couldn't save — ask your admin to add the 'birthday' column.");
     }
@@ -1562,7 +1630,7 @@ async function doClaimBirthday() {
     await sbPatch('employees', `username=eq.${encodeURIComponent(sess.username)}`, { points: newPoints, birthday_claimed_year: currentYear });
     toast('🎁🎂 Happy Birthday! +50 points!','success');
     confetti();
-    refreshEmpView();
+    refreshActivitiesView();
   } catch(e) {
     dbErrorToast(e, "Birthday gift couldn't save — ask your admin to add the 'birthday_claimed_year' column.");
   }
@@ -1622,8 +1690,6 @@ function renderDashboard(user) {
       <p>You are the ultimate PointsParty champion!</p>
     </div></div>`;
   }
-
-  renderActivities(user, daysReg);
 
   document.getElementById('bioInput').value = user.bio || '';
   updateBioCounter();
@@ -1845,7 +1911,7 @@ async function issueViolation() {
     renderAdminDashboard();
     // Refresh employee view if it's the logged-in user
     const sess = loadSession();
-    if (sess && sess.username === target) refreshEmpView();
+    if (sess && sess.username === target) { refreshEmpView(); refreshActivitiesView(); }
   } catch(e) {
     toast('Failed to issue violation.','error');
     console.error(e);
@@ -1872,7 +1938,7 @@ async function creditMonthlyPoints(username) {
     confetti();
     renderAdminDashboard();
     const sess = loadSession();
-    if (sess && sess.username === username) refreshEmpView();
+    if (sess && sess.username === username) { refreshEmpView(); refreshActivitiesView(); }
   } catch(e) {
     toast('Failed to credit points.','error');
     console.error(e);
