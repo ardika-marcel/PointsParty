@@ -177,6 +177,7 @@
   .btn-red { background: linear-gradient(135deg, #EF4444, #B91C1C); color: white; }
   .btn-sm { font-size: .85rem; padding: .45rem 1.1rem; }
   .btn-full { width: 100%; text-align: center; display: block; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; transform: none !important; filter: none !important; }
 
   #toast {
     position: fixed; bottom: 2rem; right: 2rem;
@@ -539,6 +540,55 @@
   .directory-bio { font-size: .85rem; color: #C4B5D8; line-height: 1.5; }
   .directory-bio.empty { color: var(--muted); font-style: italic; }
 
+  /* Activities: spin wheel, pick-a-card, birthday */
+  .activity-block {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+  }
+  .activity-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .activity-title {
+    font-weight: 800;
+    font-size: 1.05rem;
+    margin-bottom: .35rem;
+    display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+  }
+  .activity-desc { font-size: .85rem; color: var(--muted); margin-bottom: .9rem; }
+  .activity-locked {
+    text-align: center;
+    padding: 1rem;
+    color: var(--muted);
+    font-size: .9rem;
+    background: rgba(255,255,255,.03);
+    border-radius: 12px;
+    border: 1px dashed rgba(255,255,255,.15);
+  }
+  .wheel-wrap { text-align: center; padding: .5rem 0 1rem; }
+  .wheel-emoji { font-size: 4rem; display: inline-block; }
+  .wheel-emoji.spinning { animation: wheelSpin 3s cubic-bezier(.17,.67,.32,1.4); }
+  @keyframes wheelSpin { from { transform: rotate(0deg); } to { transform: rotate(1800deg); } }
+  .card-row { display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; margin: .5rem 0 1rem; }
+  .pick-card {
+    width: 62px; height: 88px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.7rem;
+    cursor: pointer;
+    transition: all .25s;
+    border: 2px solid rgba(255,255,255,.15);
+    user-select: none;
+  }
+  .pick-card:hover:not(.disabled):not(.revealed) { transform: translateY(-6px); box-shadow: 0 8px 20px rgba(168,85,247,.4); }
+  .pick-card.revealed {
+    background: rgba(255,255,255,.08);
+    cursor: default;
+    font-family: 'Fredoka One', cursive;
+    color: var(--yellow);
+    font-size: 1.3rem;
+  }
+  .pick-card.disabled { opacity: .4; cursor: not-allowed; }
+
   @media (max-width: 600px) {
     .profile-header { flex-direction: column; text-align: center; }
     .points-big { font-size: 2.5rem; }
@@ -607,6 +657,23 @@
         <h3>Reach Milestones → Win Trips!</h3>
         <p>Hit enough points and you'll unlock incredible travel rewards — from Bandung to Turkey to Umroh! 🕌</p>
       </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎮 Activities & Games</h2>
+    <p style="margin-bottom:.75rem;">Bonus points don't just come from your monthly credit — play these games too! Unlocks are automatic based on your rank.</p>
+    <div class="violation-type-card vt-mini">
+      <div class="vt-icon">🎡</div>
+      <div class="vt-info"><h4>Spin the Wheel — every Wednesday</h4><p>All ranks. 0 pts (50%), 5 pts (25%), 10 pts (20%), JACKPOT 15 pts (5%)</p></div>
+    </div>
+    <div class="violation-type-card vt-custom">
+      <div class="vt-icon">🃏</div>
+      <div class="vt-info"><h4>Pick-a-Card — every Saturday</h4><p>Senior rank & up. 5 cards: one worth 5 pts, one worth 10 pts, rest are empty</p></div>
+    </div>
+    <div class="violation-type-card vt-grande">
+      <div class="vt-icon">🎁</div>
+      <div class="vt-info"><h4>Birthday Present — once a year</h4><p>Chief rank only. Set your birthday once (locked forever), get 50 pts guaranteed on the day</p></div>
     </div>
   </div>
 
@@ -756,6 +823,10 @@
       </div>
     </div>
     <div id="empNextTripBanner" style="display:none;"></div>
+    <div class="card" id="activitiesCard">
+      <h2>🎮 Activities</h2>
+      <div id="activitiesBody"></div>
+    </div>
     <div class="card">
       <h2>📝 Your Bio</h2>
       <p style="color:var(--muted);font-size:.85rem;margin-bottom:.75rem;">Tell your coworkers a bit about yourself! Max 25 words — visible in the Employee Directory.</p>
@@ -981,6 +1052,16 @@ function confetti() {
   c.textContent = '🎉';
   document.body.appendChild(c);
   setTimeout(() => c.remove(), 1000);
+}
+
+function dbErrorToast(e, extraHint) {
+  const msg = String((e && e.message) || e || '');
+  if (msg.toLowerCase().includes('column')) {
+    toast(`${extraHint || "Missing database column — ask your admin to run the activities SQL migration."} 🛠️`, 'error');
+  } else {
+    toast('Something went wrong. Try again!', 'error');
+  }
+  console.error(e);
 }
 
 // ===== CONFIRM MODAL =====
@@ -1245,6 +1326,248 @@ function getDaysRegistered(joinedAtStr) {
   return Math.max(0, Math.floor((Date.now() - joined.getTime()) / (1000*60*60*24)));
 }
 
+// ===== ACTIVITIES: SPIN WHEEL, PICK-A-CARD, BIRTHDAY PRESENT =====
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function isWednesday() { return new Date().getDay() === 3; }
+function isSaturday() { return new Date().getDay() === 6; }
+
+function spinWheelOutcome() {
+  const r = Math.random()*100;
+  if (r < 50) return { pts: 0, label: 'No luck this time — 0 pts. Try again next Wednesday!' };
+  if (r < 75) return { pts: 5, label: 'Nice, you won 5 points!' };
+  if (r < 95) return { pts: 10, label: 'Awesome, you won 10 points!' };
+  return { pts: 15, label: 'JACKPOT!! You won 15 points!!' };
+}
+
+function renderActivities(user, daysReg) {
+  const wrap = document.getElementById('activitiesBody');
+  if (!wrap) return;
+  let html = '';
+
+  // Spin the wheel — every rank
+  html += renderSpinWheelBlock(user);
+
+  // Pick-a-card — Senior (365+ days) and up
+  if (daysReg >= 365) {
+    html += renderPickCardBlock(user);
+  } else {
+    html += `<div class="activity-block">
+      <div class="activity-title">🃏 Pick-a-Card <span class="badge badge-rank" style="font-size:.65rem;">Senior+</span></div>
+      <div class="activity-locked">🔒 Unlocks once you reach <strong>Senior</strong> rank (365+ days registered).</div>
+    </div>`;
+  }
+
+  // Birthday present — Chief (730+ days) only
+  if (daysReg >= 730) {
+    html += renderBirthdayBlock(user);
+  } else {
+    html += `<div class="activity-block">
+      <div class="activity-title">🎁 Birthday Present <span class="badge badge-rank" style="font-size:.65rem;">Chief only</span></div>
+      <div class="activity-locked">🔒 Unlocks once you reach <strong>Chief</strong> rank (730+ days registered).</div>
+    </div>`;
+  }
+
+  wrap.innerHTML = html;
+}
+
+function renderSpinWheelBlock(user) {
+  const already = user.last_spin_date === todayStr();
+  const wed = isWednesday();
+  let inner;
+  if (!wed) {
+    inner = `<div class="activity-locked">🕰️ The Spin Wheel only opens on <strong>Wednesdays</strong>! Come back then. 🎡</div>`;
+  } else if (already) {
+    inner = `<div class="activity-locked">✅ You already spun the wheel this Wednesday! See you next week. 🎉</div>`;
+  } else {
+    inner = `
+      <div class="wheel-wrap">
+        <div class="wheel-emoji" id="wheelEmoji">🎡</div>
+        <div style="margin-top:.75rem;">
+          <button class="btn btn-pink" id="spinBtn" onclick="doSpinWheel()">🎲 Spin the Wheel!</button>
+        </div>
+      </div>`;
+  }
+  return `<div class="activity-block">
+    <div class="activity-title">🎡 Spin the Wheel</div>
+    <div class="activity-desc">Every Wednesday, spin for a chance at 0, 5, 10, or a 15pt JACKPOT!</div>
+    ${inner}
+  </div>`;
+}
+
+async function doSpinWheel() {
+  const sess = loadSession();
+  if (!sess) return;
+  const btn = document.getElementById('spinBtn');
+  const emoji = document.getElementById('wheelEmoji');
+  if (btn) btn.disabled = true;
+  if (emoji) emoji.classList.add('spinning');
+  setTimeout(async () => {
+    const outcome = spinWheelOutcome();
+    try {
+      const users = await sbGet('employees', `username=eq.${encodeURIComponent(sess.username)}`);
+      if (!users || users.length===0) return;
+      const user = users[0];
+      if (user.last_spin_date === todayStr()) { toast('Already spun today!','error'); refreshEmpView(); return; }
+      const newPoints = (user.points||0) + outcome.pts;
+      await sbPatch('employees', `username=eq.${encodeURIComponent(sess.username)}`, { points: newPoints, last_spin_date: todayStr() });
+      toast(`🎡 ${outcome.label}`, outcome.pts>=15?'success':'info');
+      if (outcome.pts >= 15) confetti();
+      refreshEmpView();
+    } catch(e) {
+      dbErrorToast(e, "Spin couldn't save — ask your admin to add the 'last_spin_date' column.");
+      if (btn) btn.disabled = false;
+      if (emoji) emoji.classList.remove('spinning');
+    }
+  }, 3000);
+}
+
+function renderPickCardBlock(user) {
+  const already = user.last_card_date === todayStr();
+  const sat = isSaturday();
+  let inner;
+  if (!sat) {
+    inner = `<div class="activity-locked">🗓️ Pick-a-Card only opens on <strong>Saturdays</strong>! Come back then. 🃏</div>`;
+  } else if (already) {
+    inner = `<div class="activity-locked">✅ You already picked a card this Saturday! See you next week. 🎉</div>`;
+  } else {
+    inner = `<div class="card-row" id="cardRow">
+      ${[0,1,2,3,4].map(i=>`<div class="pick-card" data-idx="${i}" onclick="doPickCard(${i})">🃏</div>`).join('')}
+    </div>`;
+  }
+  return `<div class="activity-block">
+    <div class="activity-title">🃏 Pick-a-Card <span class="badge badge-rank" style="font-size:.65rem;">Senior+</span></div>
+    <div class="activity-desc">Every Saturday, pick 1 of 5 cards. One holds 5 pts, one holds 10 pts, the rest are empty!</div>
+    ${inner}
+  </div>`;
+}
+
+let cardDeck = null;
+function shuffledDeck() {
+  const deck = [5,10,0,0,0];
+  for (let i = deck.length-1; i>0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [deck[i],deck[j]] = [deck[j],deck[i]];
+  }
+  return deck;
+}
+
+async function doPickCard(idx) {
+  const sess = loadSession();
+  if (!sess) return;
+  const cards = document.querySelectorAll('#cardRow .pick-card');
+  if (!cards.length) return;
+  if (!cardDeck) cardDeck = shuffledDeck();
+  cards.forEach(c => c.classList.add('disabled'));
+  const chosen = cards[idx];
+  const pts = cardDeck[idx];
+  chosen.classList.remove('disabled');
+  chosen.classList.add('revealed');
+  chosen.textContent = pts > 0 ? `+${pts}` : '0';
+  try {
+    const users = await sbGet('employees', `username=eq.${encodeURIComponent(sess.username)}`);
+    if (!users || users.length===0) return;
+    const user = users[0];
+    if (user.last_card_date === todayStr()) { toast('Already picked a card today!','error'); cardDeck = null; setTimeout(refreshEmpView, 600); return; }
+    const newPoints = (user.points||0) + pts;
+    await sbPatch('employees', `username=eq.${encodeURIComponent(sess.username)}`, { points: newPoints, last_card_date: todayStr() });
+    toast(pts>0 ? `🃏 You won ${pts} points!` : '🃏 Empty card — better luck next week!', pts>0?'success':'info');
+    if (pts>0) confetti();
+    cardDeck = null;
+    setTimeout(refreshEmpView, 900);
+  } catch(e) {
+    dbErrorToast(e, "Card pick couldn't save — ask your admin to add the 'last_card_date' column.");
+    cardDeck = null;
+  }
+}
+
+function parseYMD(str) {
+  const [y,m,d] = str.split('-').map(Number);
+  return {y,m,d};
+}
+function isBirthdayToday(birthdayStr) {
+  if (!birthdayStr) return false;
+  const b = parseYMD(birthdayStr);
+  const t = new Date();
+  return b.m === (t.getMonth()+1) && b.d === t.getDate();
+}
+function formatBirthdayDisplay(birthdayStr) {
+  const b = parseYMD(birthdayStr);
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return `${b.d} ${months[b.m-1]}`;
+}
+
+function renderBirthdayBlock(user) {
+  const currentYear = new Date().getFullYear();
+  let inner;
+  if (!user.birthday) {
+    inner = `
+      <label>Set Your Birthday (one-time — cannot be changed!)</label>
+      <input type="date" id="birthdayInput">
+      <button class="btn btn-yellow btn-sm" onclick="doSetBirthday()">🎂 Save Birthday</button>`;
+  } else {
+    const isToday = isBirthdayToday(user.birthday);
+    const claimedThisYear = user.birthday_claimed_year === currentYear;
+    const displayDate = formatBirthdayDisplay(user.birthday);
+    if (isToday && !claimedThisYear) {
+      inner = `<div class="activity-locked" style="border-style:solid;border-color:var(--yellow);color:var(--text);">🎂 Birthday set: <strong>${displayDate}</strong></div>
+        <div style="text-align:center;margin-top:1rem;">
+          <button class="btn btn-yellow" onclick="doClaimBirthday()">🎁 It's my birthday — Claim 50 pts!</button>
+        </div>`;
+    } else if (isToday && claimedThisYear) {
+      inner = `<div class="activity-locked">🎉 Happy Birthday! You already claimed your 50 pts this year. 🎂</div>`;
+    } else {
+      inner = `<div class="activity-locked">🎂 Birthday set: <strong>${displayDate}</strong> — come back on that day for your guaranteed 50 pts gift!</div>`;
+    }
+  }
+  return `<div class="activity-block">
+    <div class="activity-title">🎁 Birthday Present <span class="badge badge-rank" style="font-size:.65rem;">Chief only</span></div>
+    <div class="activity-desc">Set your birthday once. On that day every year, get a guaranteed 50 pts gift!</div>
+    ${inner}
+  </div>`;
+}
+
+async function doSetBirthday() {
+  const sess = loadSession();
+  if (!sess) return;
+  const val = document.getElementById('birthdayInput').value;
+  if (!val) { toast('Pick a date first!','error'); return; }
+  showConfirm('🎂', 'Lock in this birthday?', `You won't be able to change it later. Are you sure ${formatBirthdayDisplay(val)} is correct?`, '🎂 Yes, Save It', async () => {
+    try {
+      const users = await sbGet('employees', `username=eq.${encodeURIComponent(sess.username)}`);
+      if (users && users[0] && users[0].birthday) { toast('Birthday already set — it cannot be changed!','error'); refreshEmpView(); return; }
+      await sbPatch('employees', `username=eq.${encodeURIComponent(sess.username)}`, { birthday: val });
+      toast('🎂 Birthday saved!','success');
+      confetti();
+      refreshEmpView();
+    } catch(e) {
+      dbErrorToast(e, "Birthday couldn't save — ask your admin to add the 'birthday' column.");
+    }
+  });
+}
+
+async function doClaimBirthday() {
+  const sess = loadSession();
+  if (!sess) return;
+  try {
+    const users = await sbGet('employees', `username=eq.${encodeURIComponent(sess.username)}`);
+    if (!users || users.length===0) return;
+    const user = users[0];
+    const currentYear = new Date().getFullYear();
+    if (!isBirthdayToday(user.birthday)) { toast("It's not your birthday today!",'error'); return; }
+    if (user.birthday_claimed_year === currentYear) { toast('Already claimed this year!','error'); return; }
+    const newPoints = (user.points||0) + 50;
+    await sbPatch('employees', `username=eq.${encodeURIComponent(sess.username)}`, { points: newPoints, birthday_claimed_year: currentYear });
+    toast('🎁🎂 Happy Birthday! +50 points!','success');
+    confetti();
+    refreshEmpView();
+  } catch(e) {
+    dbErrorToast(e, "Birthday gift couldn't save — ask your admin to add the 'birthday_claimed_year' column.");
+  }
+}
+
 function renderDashboard(user) {
   hide('emp-auth'); hide('emp-login'); hide('emp-register');
   show('emp-dashboard');
@@ -1299,6 +1622,8 @@ function renderDashboard(user) {
       <p>You are the ultimate PointsParty champion!</p>
     </div></div>`;
   }
+
+  renderActivities(user, daysReg);
 
   document.getElementById('bioInput').value = user.bio || '';
   updateBioCounter();
